@@ -1,0 +1,133 @@
+/* app.wxss - Tea Shop Admin Global Styles */
+page {
+  background-color: #F5F5F5;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
+  color: #333333;
+  font-size: 30rpx;
+  line-height: 1.6;
+  box-sizing: border-box;
+}
+
+view, text, image, scroll-view {
+  box-sizing: border-box;
+}
+
+page {
+  --color-primary: #8B6914;
+  --color-success: #5B7744;
+  --color-danger: #E54D42;
+  --color-warning: #C4A862;
+  --color-bg: #F5F5F5;
+  --color-bg-white: #FFFFFF;
+  --color-text: #333333;
+  --color-text-secondary: #999999;
+  --color-border: #EEEEEE;
+  --radius-card: 16rpx;
+  --shadow-card: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+}
+
+.safe-bottom {
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+/* Admin button styles */
+.btn-primary {
+  background-color: #8B6914;
+  color: #ffffff;
+  border: none;
+  border-radius: 12rpx;
+  padding: 24rpx 48rpx;
+  font-size: 32rpx;
+  text-align: center;
+}
+
+.btn-primary::after {
+  border: none;
+}
+
+.btn-danger {
+  background-color: #E54D42;
+  color: #ffffff;
+  border: none;
+  border-radius: 12rpx;
+  padding: 24rpx 48rpx;
+  font-size: 32rpx;
+  text-align: center;
+}
+
+.btn-danger::after {
+  border: none;
+}
+
+.btn-success {
+  background-color: #5B7744;
+  color: #ffffff;
+  border: none;
+  border-radius: 12rpx;
+  padding: 24rpx 48rpx;
+  font-size: 32rpx;
+  text-align: center;
+}
+
+.btn-success::after {
+  border: none;
+}
+
+/* Auth denied overlay */
+.deny-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 60rpx;
+}
+.deny-icon {
+  font-size: 120rpx;
+  margin-bottom: 40rpx;
+}
+.deny-title {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 20rpx;
+}
+.deny-desc {
+  font-size: 28rpx;
+  color: #999999;
+  text-align: center;
+  line-height: 1.8;
+}
+
+/* Loading overlay during auth check */
+.auth-loading {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ffffff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+}
+.auth-loading-text {
+  font-size: 28rpx;
+  color: #999999;
+  margin-top: 20rpx;
+}
+
+::-webkit-scrollbar {
+  display: none;
+  width: 0;
+  height: 0;
+  color: transparent;
+}

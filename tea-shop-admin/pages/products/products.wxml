@@ -1,0 +1,81 @@
+<!-- pages/products/products.wxml -->
+<view class="products-page" wx:if="{{authState === 'allowed'}}">
+
+  <!-- Filter Bar -->
+  <view class="filter-bar">
+    <view class="filter-row">
+      <view class="filter-group">
+        <text class="filter-label">商品状态</text>
+        <picker class="filter-picker" mode="selector" range="{{statusOptions}}" value="{{activeStatus}}" bindchange="switchStatus">
+          <view class="filter-select">
+            <text>{{statusOptions[activeStatus]}}</text>
+            <text class="select-arrow">▼</text>
+          </view>
+        </picker>
+      </view>
+      <view class="filter-group">
+        <text class="filter-label">商品分类</text>
+        <picker class="filter-picker" mode="selector" range="{{categoryOptions}}" value="{{activeCategory}}" bindchange="switchCategory">
+          <view class="filter-select">
+            <text>{{categoryOptions[activeCategory]}}</text>
+            <text class="select-arrow">▼</text>
+          </view>
+        </picker>
+      </view>
+    </view>
+  </view>
+
+  <!-- Product List -->
+  <scroll-view class="product-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+    <view class="product-card" wx:for="{{products}}" wx:key="_id">
+      <view class="product-info" bindtap="goToEdit" data-id="{{item._id}}">
+        <view class="product-img">
+          <image class="product-img-real" wx:if="{{item.images.length > 0}}" src="{{item.images[item.coverIndex || 0]}}" mode="aspectFill" />
+          <text class="img-text" wx:else>{{item.name[0]}}</text>
+        </view>
+        <view class="product-detail">
+          <text class="product-name">{{item.name}}</text>
+          <text class="product-category">{{item.category}}</text>
+          <view class="product-meta">
+            <text class="product-price">¥{{item.price}}</text>
+            <text class="product-stock">库存: {{item.stock}}</text>
+            <text class="product-sales">已售: {{item.sales}}</text>
+          </view>
+        </view>
+      </view>
+      <view class="product-actions">
+        <view class="status-btn {{item.status === 'active' ? 'active' : 'hidden'}}" catchtap="toggleStatus" data-id="{{item._id}}">
+          <text>{{item.status === 'active' ? '下架' : '上架'}}</text>
+        </view>
+        <view class="edit-btn" catchtap="goToEdit" data-id="{{item._id}}">
+          <text>编辑</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Empty State -->
+    <view class="empty-state" wx:if="{{products.length === 0}}">
+      <text class="empty-text">暂无匹配商品</text>
+    </view>
+
+    <view class="bottom-spacer"></view>
+  </scroll-view>
+
+  <!-- Add Button -->
+  <view class="fab-btn" bindtap="goToEdit">
+    <text>+</text>
+  </view>
+</view>
+
+<!-- Auth Loading -->
+<view class="auth-loading" wx:if="{{authState === 'loading'}}">
+  <view class="deny-icon">⏳</view>
+  <text class="auth-loading-text">正在验证商家身份...</text>
+</view>
+
+<!-- Auth Denied -->
+<view class="deny-overlay" wx:if="{{authState === 'denied'}}">
+  <view class="deny-icon">🔒</view>
+  <text class="deny-title">无访问权限</text>
+  <text class="deny-desc">您不是本店管理员\n请联系商家管理员添加权限</text>
+</view>

@@ -1,0 +1,86 @@
+<!-- pages/product-detail/product-detail.wxml -->
+<view class="detail-page" wx:if="{{product}}">
+
+  <!-- Product Images Swiper -->
+  <view class="detail-img-section">
+    <swiper class="detail-swiper" indicator-dots="{{product.images.length > 1}}" indicator-color="rgba(255,255,255,0.4)" indicator-active-color="#ffffff" autoplay="{{false}}" circular="{{true}}">
+      <swiper-item wx:for="{{product.images}}" wx:key="index">
+        <image class="swiper-img" src="{{item}}" mode="aspectFill" bindtap="previewImage" data-src="{{item}}" />
+      </swiper-item>
+      <!-- Fallback if no images -->
+      <swiper-item wx:if="{{!product.images || product.images.length === 0}}">
+        <view class="detail-img-placeholder" style="background: linear-gradient(135deg, {{product.id % 2 === 0 ? '#E8DCC8, #D4C4A8' : '#C8D8B8, #A8C090'}});">
+          <text class="detail-placeholder-text">{{product.name[0]}}</text>
+        </view>
+      </swiper-item>
+    </swiper>
+  </view>
+
+  <!-- Product Info -->
+  <view class="detail-info-section">
+    <view class="detail-price-row">
+      <text class="detail-price-symbol">¥</text>
+      <text class="detail-price">{{product.price}}</text>
+      <text class="detail-original-price" wx:if="{{product.originalPrice}}">¥{{product.originalPrice}}</text>
+    </view>
+    <text class="detail-name">{{product.name}}</text>
+    <text class="detail-desc">{{product.desc}}</text>
+    <view class="detail-tags">
+      <view class="detail-tag">
+        <text>已售 {{product.sales}}</text>
+      </view>
+      <view class="detail-tag">
+        <text>{{product.category}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Story Section -->
+  <view class="detail-story" wx:if="{{product.story || product.desc}}">
+    <view class="story-title">
+      <view class="story-dot"></view>
+      <text>茶叶故事</text>
+    </view>
+    <text class="story-content">{{product.story || product.desc}}</text>
+  </view>
+
+  <!-- Quantity Selector -->
+  <view class="detail-qty-section">
+    <text class="qty-label">购买数量</text>
+    <view class="qty-control">
+      <view class="qty-btn {{quantity <= 1 ? 'disabled' : ''}}" bindtap="decreaseQty">
+        <text>-</text>
+      </view>
+      <text class="qty-num">{{quantity}}</text>
+      <view class="qty-btn" bindtap="increaseQty">
+        <text>+</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Cart Badge Info -->
+  <view class="cart-info" wx:if="{{quantityInCart > 0}}" bindtap="goToCart">
+    <text class="cart-info-text">购物车已有 {{quantityInCart}} 件</text>
+    <text class="cart-info-link">查看购物车 ›</text>
+  </view>
+
+  <!-- Bottom Spacer for fixed bar -->
+  <view class="bottom-spacer"></view>
+
+  <!-- Fixed Bottom Bar -->
+  <view class="detail-bottom-bar safe-bottom">
+    <view class="bar-cart" bindtap="goToCart">
+      <text class="bar-cart-icon">🛒</text>
+      <view class="bar-cart-badge" wx:if="{{quantityInCart > 0}}">
+        <text>{{quantityInCart}}</text>
+      </view>
+      <text class="bar-cart-text">购物车</text>
+    </view>
+    <view class="bar-add-cart" bindtap="addToCart">
+      <text>加入购物车</text>
+    </view>
+    <view class="bar-buy-now" bindtap="buyNow">
+      <text>立即购买</text>
+    </view>
+  </view>
+</view>

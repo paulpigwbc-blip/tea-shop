@@ -1,0 +1,383 @@
+/* pages/order-list/order-list.wxss */
+
+.order-list-page {
+  background: #F5F5F5;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Tab Bar */
+.tab-bar {
+  display: flex;
+  background: #ffffff;
+  padding: 0;
+  border-bottom: 1rpx solid #EEEEEE;
+  flex-shrink: 0;
+}
+
+.tab-item {
+  flex: 1;
+  text-align: center;
+  padding: 28rpx 0;
+  font-size: 30rpx;
+  color: #666666;
+  position: relative;
+}
+
+.tab-item.active {
+  color: #8B6914;
+  font-weight: bold;
+}
+
+.tab-indicator {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 40rpx;
+  height: 4rpx;
+  background: #8B6914;
+  border-radius: 2rpx;
+}
+
+/* Order Scroll */
+.order-scroll {
+  flex: 1;
+  padding: 16rpx;
+}
+
+/* Order Card */
+.order-card {
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 24rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+}
+
+.order-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding-bottom: 16rpx;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.order-no {
+  font-size: 26rpx;
+  color: #999999;
+}
+
+.order-status {
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+/* Order Items */
+.order-items {
+  margin-bottom: 16rpx;
+}
+
+.order-item-preview {
+  display: flex;
+  align-items: center;
+  padding: 12rpx 0;
+}
+
+.preview-img {
+  width: 130rpx;
+  height: 130rpx;
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: 20rpx;
+  overflow: hidden;
+}
+
+.preview-text {
+  font-size: 28rpx;
+  color: rgba(139, 105, 20, 0.2);
+  font-weight: bold;
+}
+
+.preview-info {
+  flex: 1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.preview-name {
+  font-size: 32rpx;
+  color: #333333;
+  font-weight: 500;
+}
+
+.preview-qty {
+  font-size: 28rpx;
+  color: #999999;
+}
+
+/* Order Footer */
+.order-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 16rpx;
+  border-top: 1rpx solid #F5F5F5;
+}
+
+.order-time {
+  font-size: 24rpx;
+  color: #BBBBBB;
+}
+
+.order-actions {
+  display: flex;
+  align-items: center;
+  gap: 16rpx;
+}
+
+.order-total {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #E54D42;
+}
+
+.action-btn {
+  padding: 14rpx 28rpx;
+  border-radius: 24rpx;
+  font-size: 28rpx;
+}
+
+.pay-btn {
+  background: #E54D42;
+  color: #ffffff;
+}
+
+.cancel-btn {
+  background: #F5F5F5;
+  color: #999999;
+}
+
+.confirm-btn {
+  background: rgba(91, 119, 68, 0.15);
+  color: #5B7744;
+}
+
+.reorder-btn {
+  background: rgba(139, 105, 20, 0.1);
+  color: #8B6914;
+}
+
+.view-btn {
+  background: #8B6914;
+  color: #ffffff;
+}
+
+.action-btn::after {
+  border: none;
+}
+
+/* Empty State */
+.empty-orders {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 200rpx;
+}
+
+.empty-icon {
+  width: 200rpx;
+  height: 200rpx;
+  background: #F5F5F5;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30rpx;
+}
+
+.empty-icon-text {
+  font-size: 80rpx;
+}
+
+.empty-text {
+  font-size: 28rpx;
+  color: #999999;
+}
+
+.bottom-spacer {
+  height: 40rpx;
+}
+
+/* ===== Mock Payment Popup ===== */
+.payment-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  display: flex;
+  align-items: flex-end;
+}
+
+.payment-popup {
+  width: 100%;
+  background: #ffffff;
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 40rpx 30rpx;
+  padding-bottom: calc(40rpx + env(safe-area-inset-bottom));
+}
+
+.pay-popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40rpx;
+}
+
+.pay-popup-title {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #333333;
+}
+
+.pay-popup-close {
+  width: 50rpx;
+  height: 50rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 40rpx;
+  color: #999999;
+}
+
+.pay-amount-section {
+  text-align: center;
+  padding: 30rpx 0 40rpx;
+}
+
+.pay-amount-label {
+  font-size: 26rpx;
+  color: #999999;
+  display: block;
+  margin-bottom: 16rpx;
+}
+
+.pay-amount-value {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+}
+
+.pay-amount-symbol {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-right: 4rpx;
+}
+
+.pay-amount-num {
+  font-size: 64rpx;
+  font-weight: bold;
+  color: #333333;
+}
+
+.pay-method-section {
+  margin-bottom: 40rpx;
+}
+
+.pay-method-label {
+  font-size: 26rpx;
+  color: #999999;
+  display: block;
+  margin-bottom: 20rpx;
+}
+
+.pay-method-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx;
+  background: #F8F8F8;
+  border-radius: 16rpx;
+  border: 2rpx solid transparent;
+}
+
+.pay-method-selected {
+  border-color: #07C160;
+  background: rgba(7, 193, 96, 0.05);
+}
+
+.pay-method-icon {
+  width: 60rpx;
+  height: 60rpx;
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.wechat-icon {
+  background: #07C160;
+}
+
+.wechat-pay-text {
+  color: #ffffff;
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.pay-method-info {
+  flex: 1;
+}
+
+.pay-method-name {
+  display: block;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 4rpx;
+}
+
+.pay-method-desc {
+  font-size: 22rpx;
+  color: #07C160;
+}
+
+.pay-method-check {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: #07C160;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 24rpx;
+}
+
+.pay-popup-btn {
+  width: 100%;
+  padding: 26rpx 0;
+  border-radius: 44rpx;
+  background: #07C160;
+  color: #ffffff;
+  text-align: center;
+  font-size: 32rpx;
+  font-weight: bold;
+  margin-top: 10rpx;
+}
+
+.pay-popup-btn.disabled {
+  background: #CCCCCC;
+  pointer-events: none;
+}

@@ -1,0 +1,150 @@
+/* pages/address-edit/address-edit.wxss */
+
+.edit-page {
+  background: #F5F5F5;
+  min-height: 100vh;
+  padding-bottom: 160rpx;
+}
+
+/* Form Card */
+.form-card {
+  background: #ffffff;
+  margin: 16rpx;
+  border-radius: 16rpx;
+  overflow: hidden;
+}
+
+.form-item {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 30rpx;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.form-item:last-child {
+  border-bottom: none;
+}
+
+.detail-item {
+  align-items: flex-start;
+}
+
+.form-label {
+  width: 160rpx;
+  font-size: 28rpx;
+  color: #333333;
+  flex-shrink: 0;
+}
+
+.form-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333333;
+  text-align: right;
+}
+
+.form-picker {
+  flex: 1;
+}
+
+.picker-display {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 28rpx;
+  color: #333333;
+}
+
+.picker-display.placeholder {
+  color: #999999;
+}
+
+.picker-arrow {
+  font-size: 32rpx;
+  color: #CCCCCC;
+  margin-left: 12rpx;
+}
+
+.form-textarea {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333333;
+  min-height: 120rpx;
+  line-height: 1.6;
+}
+
+/* Default Switch Row */
+.default-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  margin: 16rpx;
+  border-radius: 16rpx;
+  padding: 28rpx 30rpx;
+}
+
+.default-label {
+  font-size: 28rpx;
+  color: #333333;
+}
+
+.toggle-switch {
+  width: 88rpx;
+  height: 48rpx;
+  border-radius: 24rpx;
+  position: relative;
+  transition: background 0.3s;
+}
+
+.toggle-switch.on {
+  background: #8B6914;
+}
+
+.toggle-switch.off {
+  background: #DDDDDD;
+}
+
+.toggle-knob {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: #ffffff;
+  position: absolute;
+  top: 4rpx;
+  transition: left 0.3s;
+  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.15);
+}
+
+.toggle-switch.on .toggle-knob {
+  left: 44rpx;
+}
+
+.toggle-switch.off .toggle-knob {
+  left: 4rpx;
+}
+
+/* Save Bar */
+.save-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  padding: 16rpx 24rpx;
+  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+}
+
+.save-btn {
+  background: #8B6914;
+  color: #ffffff;
+  text-align: center;
+  padding: 24rpx;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  font-weight: bold;
+}
+
+.save-btn::after {
+  border: none;
+}

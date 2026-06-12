@@ -1,0 +1,84 @@
+<!-- pages/order-confirm/order-confirm.wxml -->
+<view class="confirm-page">
+
+  <!-- Address Section -->
+  <view class="address-section" bindtap="selectAddress">
+    <view class="address-card" wx:if="{{selectedAddress}}">
+      <view class="address-left">
+        <text class="address-icon">📍</text>
+      </view>
+      <view class="address-content">
+        <view class="address-top-row">
+          <text class="address-name">{{selectedAddress.name}}</text>
+          <text class="address-phone">{{selectedAddress.phone}}</text>
+        </view>
+        <text class="address-detail">{{selectedAddress.province}}{{selectedAddress.city}}{{selectedAddress.district}}{{selectedAddress.detail}}</text>
+      </view>
+      <text class="address-arrow">›</text>
+    </view>
+    <view class="no-address" wx:if="{{!selectedAddress}}">
+      <text class="no-address-text">请选择收货地址</text>
+      <text class="address-arrow">›</text>
+    </view>
+  </view>
+
+  <!-- Order Items -->
+  <view class="items-section">
+    <view class="section-title">
+      <view class="section-dot"></view>
+      <text>商品清单</text>
+    </view>
+    <view class="order-item" wx:for="{{items}}" wx:key="id">
+      <view class="item-img">
+        <image class="item-img-real" wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFill" />
+        <view class="item-placeholder" wx:else style="background: linear-gradient(135deg, {{item.id % 2 === 0 ? '#E8DCC8, #D4C4A8' : '#C8D8B8, #A8C090'}});">
+          <text class="item-placeholder-text">{{item.name[0]}}</text>
+        </view>
+      </view>
+      <view class="item-info">
+        <text class="item-name">{{item.name}}</text>
+        <text class="item-desc">{{item.desc}}</text>
+      </view>
+      <view class="item-right">
+        <text class="item-price">¥{{item.price}}</text>
+        <text class="item-qty">x{{item.quantity}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Note Section -->
+  <view class="note-section">
+    <view class="section-title">
+      <view class="section-dot"></view>
+      <text>订单备注</text>
+    </view>
+    <textarea class="note-input" placeholder="选填：对订单有什么要求？"
+               value="{{note}}" bindinput="onNoteInput" maxlength="200" />
+  </view>
+
+  <!-- Price Summary -->
+  <view class="price-section">
+    <view class="price-row">
+      <text class="price-label">商品合计</text>
+      <text class="price-value">¥{{totalPrice}}</text>
+    </view>
+    <view class="price-row total-row">
+      <text class="price-label">实付金额</text>
+      <text class="price-total">¥{{totalPrice}}</text>
+    </view>
+  </view>
+
+  <!-- Bottom Spacer -->
+  <view class="bottom-spacer"></view>
+
+  <!-- Fixed Bottom Bar -->
+  <view class="submit-bar safe-bottom">
+    <view class="submit-total">
+      <text class="submit-label">合计：</text>
+      <text class="submit-price">¥{{totalPrice}}</text>
+    </view>
+    <view class="submit-btn {{submitting ? 'disabled' : ''}}" bindtap="submitOrder">
+      <text>{{submitting ? '提交中...' : '提交订单'}}</text>
+    </view>
+  </view>
+</view>

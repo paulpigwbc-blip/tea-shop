@@ -1,0 +1,187 @@
+/* pages/contact/contact.wxss */
+
+.contact-page {
+  background: #F5F5F5;
+  min-height: 100vh;
+}
+
+/* Header Banner */
+.contact-header {
+  height: 360rpx;
+  background: linear-gradient(135deg, #5B7744, #3D5232);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.header-overlay {
+  text-align: center;
+  color: #ffffff;
+}
+
+.header-title {
+  display: block;
+  font-size: 44rpx;
+  font-weight: bold;
+  letter-spacing: 8rpx;
+  margin-bottom: 16rpx;
+}
+
+.header-subtitle {
+  display: block;
+  font-size: 26rpx;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 4rpx;
+}
+
+/* Section Title */
+.section-title-wrap {
+  display: flex;
+  align-items: center;
+  padding: 30rpx 30rpx 20rpx;
+}
+
+.section-dot {
+  width: 8rpx;
+  height: 28rpx;
+  background: #8B6914;
+  border-radius: 4rpx;
+  margin-right: 16rpx;
+}
+
+.section-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333333;
+}
+
+/* Contact Section */
+.contact-section {
+  background: #ffffff;
+  border-radius: 20rpx 20rpx 0 0;
+  margin-top: -20rpx;
+  position: relative;
+  padding-bottom: 10rpx;
+}
+
+.contact-card {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 30rpx;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.contact-card:last-child {
+  border-bottom: none;
+}
+
+.contact-icon-wrap {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 24rpx;
+  flex-shrink: 0;
+}
+
+.phone-bg {
+  background: rgba(139, 105, 20, 0.1);
+}
+
+.wechat-bg {
+  background: rgba(91, 119, 68, 0.1);
+}
+
+.hours-bg {
+  background: rgba(196, 168, 98, 0.1);
+}
+
+.delivery-bg {
+  background: rgba(91, 119, 68, 0.1);
+}
+
+.contact-emoji {
+  font-size: 36rpx;
+}
+
+.contact-detail {
+  flex: 1;
+}
+
+.contact-label {
+  display: block;
+  font-size: 24rpx;
+  color: #999999;
+  margin-bottom: 4rpx;
+}
+
+.contact-value {
+  display: block;
+  font-size: 30rpx;
+  color: #333333;
+  font-weight: 500;
+}
+
+.contact-arrow {
+  padding: 10rpx;
+}
+
+.arrow-text {
+  font-size: 32rpx;
+  color: #CCCCCC;
+}
+
+.contact-action {
+  padding: 10rpx 20rpx;
+  background: #8B6914;
+  border-radius: 20rpx;
+}
+
+.copy-text {
+  font-size: 22rpx;
+  color: #ffffff;
+}
+
+/* QR Code Section */
+.qrcode-section {
+  background: #ffffff;
+  margin-top: 16rpx;
+  padding-bottom: 30rpx;
+}
+
+.qrcode-card {
+  display: flex;
+  justify-content: center;
+  padding: 30rpx;
+}
+
+.qrcode-placeholder {
+  width: 320rpx;
+  height: 320rpx;
+  background: #F5F5F5;
+  border-radius: 16rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx dashed #DDDDDD;
+}
+
+.qrcode-text {
+  font-size: 40rpx;
+  color: #CCCCCC;
+  margin-bottom: 12rpx;
+}
+
+.qrcode-subtext {
+  font-size: 22rpx;
+  color: #BBBBBB;
+}
+
+/* Bottom Spacer */
+.bottom-spacer {
+  height: 120rpx;
+}

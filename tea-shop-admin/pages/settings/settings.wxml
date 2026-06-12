@@ -1,0 +1,43 @@
+<!-- pages/settings/settings.wxml -->
+<view class="settings-page" wx:if="{{authState === 'allowed'}}">
+  <view class="form-card">
+    <view class="form-item">
+      <text class="form-label">店铺名称</text>
+      <input class="form-input" placeholder="店铺名称" value="{{shopSettings.name}}" bindinput="onInput" data-field="name" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">营业状态</text>
+      <view class="toggle-row" bindtap="toggleShop">
+        <text class="toggle-status {{shopSettings.isOpen ? 'open' : 'closed'}}">{{shopSettings.isOpen ? '营业中' : '已休息'}}</text>
+        <view class="toggle-switch {{shopSettings.isOpen ? 'on' : 'off'}}">
+          <view class="toggle-knob"></view>
+        </view>
+      </view>
+    </view>
+    <view class="form-item">
+      <text class="form-label">营业时间</text>
+      <input class="form-input" placeholder="如: 09:00-21:00" value="{{shopSettings.businessHours}}" bindinput="onInput" data-field="businessHours" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">店铺公告</text>
+      <textarea class="form-textarea" placeholder="输入店铺公告" value="{{shopSettings.announcement}}" bindinput="onInput" data-field="announcement" />
+    </view>
+  </view>
+
+  <view class="save-btn" bindtap="saveSettings">
+    <text>保存设置</text>
+  </view>
+</view>
+
+<!-- Auth Loading -->
+<view class="auth-loading" wx:if="{{authState === 'loading'}}">
+  <view class="deny-icon">⏳</view>
+  <text class="auth-loading-text">正在验证商家身份...</text>
+</view>
+
+<!-- Auth Denied -->
+<view class="deny-overlay" wx:if="{{authState === 'denied'}}">
+  <view class="deny-icon">🔒</view>
+  <text class="deny-title">无访问权限</text>
+  <text class="deny-desc">您不是本店管理员\n请联系商家管理员添加权限</text>
+</view>

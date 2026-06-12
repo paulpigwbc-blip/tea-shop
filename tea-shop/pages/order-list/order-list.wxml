@@ -1,0 +1,114 @@
+<!-- pages/order-list/order-list.wxml -->
+<view class="order-list-page">
+
+  <!-- Tab Bar -->
+  <view class="tab-bar">
+    <view class="tab-item {{activeTab === index ? 'active' : ''}}"
+          wx:for="{{tabs}}" wx:key="index"
+          bindtap="switchTab" data-index="{{index}}">
+      <text>{{item}}</text>
+      <view class="tab-indicator" wx:if="{{activeTab === index}}"></view>
+    </view>
+  </view>
+
+  <!-- Order List -->
+  <scroll-view class="order-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+    <view class="order-card" wx:for="{{filteredOrders}}" wx:key="_id" bindtap="viewOrder" data-id="{{item._id}}">
+      <!-- Order Header -->
+      <view class="order-header">
+        <text class="order-no">{{item.orderNo}}</text>
+        <text class="order-status" style="color: {{item.statusColor}};">{{item.statusText}}</text>
+      </view>
+
+      <!-- Order Items Preview -->
+      <view class="order-items">
+        <view class="order-item-preview" wx:for="{{item.items}}" wx:for-item="product" wx:key="productId" catchtap="goToProductDetail" data-id="{{product.productId}}">
+          <image class="preview-img" wx:if="{{product.image}}" src="{{product.image}}" mode="aspectFill" />
+          <view class="preview-img preview-fallback" wx:else style="background: linear-gradient(135deg, {{product.productId % 2 === 0 ? '#E8DCC8, #D4C4A8' : '#C8D8B8, #A8C090'}});">
+            <text class="preview-text">{{product.name[0]}}</text>
+          </view>
+          <view class="preview-info">
+            <text class="preview-name">{{product.name}}</text>
+            <text class="preview-qty">x{{product.quantity}}</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- Order Footer -->
+      <view class="order-footer">
+        <text class="order-time">{{item.formattedDate}}</text>
+        <view class="order-actions">
+          <text class="order-total">¥{{item.totalPrice}}</text>
+          <view class="action-btn pay-btn" wx:if="{{item.status === 'pending'}}"
+                catchtap="payOrder" data-id="{{item._id}}">
+            <text>付款</text>
+          </view>
+          <view class="action-btn cancel-btn" wx:if="{{item.status === 'pending'}}"
+                catchtap="cancelOrder" data-id="{{item._id}}">
+            <text>取消</text>
+          </view>
+          <view class="action-btn confirm-btn" wx:if="{{item.status === 'shipped'}}"
+                catchtap="confirmReceipt" data-id="{{item._id}}">
+            <text>确认收货</text>
+          </view>
+          <view class="action-btn reorder-btn" wx:if="{{item.status === 'completed'}}"
+                catchtap="reorder" data-id="{{item._id}}">
+            <text>再来一单</text>
+          </view>
+          <view class="action-btn view-btn">
+            <text>详情</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <!-- Empty State -->
+    <view class="empty-orders" wx:if="{{filteredOrders.length === 0}}">
+      <view class="empty-icon">
+        <text class="empty-icon-text">📋</text>
+      </view>
+      <text class="empty-text">暂无相关订单</text>
+    </view>
+
+    <view class="bottom-spacer"></view>
+  </scroll-view>
+
+  <!-- Mock Payment Popup -->
+  <view class="payment-mask" wx:if="{{showPayPopup}}" bindtap="closePayPopup">
+    <view class="payment-popup" catchtap>
+      <view class="pay-popup-header">
+        <text class="pay-popup-title">确认支付</text>
+        <view class="pay-popup-close" bindtap="closePayPopup">
+          <text>&times;</text>
+        </view>
+      </view>
+      <view class="pay-amount-section">
+        <text class="pay-amount-label">支付金额</text>
+        <view class="pay-amount-value">
+          <text class="pay-amount-symbol">¥</text>
+          <text class="pay-amount-num">{{payAmount}}</text>
+        </view>
+      </view>
+      <view class="pay-method-section">
+        <text class="pay-method-label">支付方式</text>
+        <view class="pay-method-item pay-method-selected">
+          <view class="pay-method-icon wechat-icon">
+            <text class="wechat-pay-text">W</text>
+          </view>
+          <view class="pay-method-info">
+            <text class="pay-method-name">微信支付</text>
+            <text class="pay-method-desc">模拟支付 (测试)</text>
+          </view>
+          <view class="pay-method-check">
+            <text>&#10003;</text>
+          </view>
+        </view>
+      </view>
+      <view class="pay-popup-btn {{payProcessing ? 'disabled' : ''}}" bindtap="confirmMockPay">
+        <text wx:if="{{!payProcessing && !paySuccess}}">确认支付</text>
+        <text wx:if="{{payProcessing}}">支付处理中...</text>
+        <text wx:if="{{paySuccess}}">支付成功</text>
+      </view>
+    </view>
+  </view>
+</view>

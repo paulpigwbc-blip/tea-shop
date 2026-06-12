@@ -1,0 +1,86 @@
+<!-- pages/contact/contact.wxml -->
+<view class="contact-page">
+
+  <!-- Header Banner -->
+  <view class="contact-header">
+    <view class="header-overlay">
+      <text class="header-title">联系我们</text>
+      <text class="header-subtitle">期待与您的每一次交流</text>
+    </view>
+  </view>
+
+  <!-- Contact Methods -->
+  <view class="contact-section">
+    <view class="section-title-wrap">
+      <view class="section-dot"></view>
+      <text class="section-title">联系方式</text>
+    </view>
+
+    <!-- Phone Card -->
+    <view class="contact-card" bindtap="makeCall" data-phone="{{phone}}">
+      <view class="contact-icon-wrap phone-bg">
+        <text class="contact-emoji">📞</text>
+      </view>
+      <view class="contact-detail">
+        <text class="contact-label">客服热线</text>
+        <text class="contact-value">{{phone}}</text>
+      </view>
+      <view class="contact-arrow">
+        <text class="arrow-text">›</text>
+      </view>
+    </view>
+
+    <!-- WeChat Card -->
+    <view class="contact-card" bindtap="copyWechat">
+      <view class="contact-icon-wrap wechat-bg">
+        <text class="contact-emoji">💬</text>
+      </view>
+      <view class="contact-detail">
+        <text class="contact-label">官方微信</text>
+        <text class="contact-value">{{wechat}}</text>
+      </view>
+      <view class="contact-action">
+        <text class="copy-text">复制</text>
+      </view>
+    </view>
+
+    <!-- Business Hours Card -->
+    <view class="contact-card">
+      <view class="contact-icon-wrap hours-bg">
+        <text class="contact-emoji">🕑</text>
+      </view>
+      <view class="contact-detail">
+        <text class="contact-label">服务时间</text>
+        <text class="contact-value">{{storeHours}}</text>
+      </view>
+    </view>
+
+    <!-- Delivery Notice Card -->
+    <view class="contact-card">
+      <view class="contact-icon-wrap delivery-bg">
+        <text class="contact-emoji">🚚</text>
+      </view>
+      <view class="contact-detail">
+        <text class="contact-label">配送方式</text>
+        <text class="contact-value">全国快递包邮</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- QR Code Section -->
+  <view class="qrcode-section">
+    <view class="section-title-wrap">
+      <view class="section-dot"></view>
+      <text class="section-title">微信扫码</text>
+    </view>
+    <view class="qrcode-card">
+      <view class="qrcode-placeholder">
+        <text class="qrcode-text">二维码</text>
+        <text class="qrcode-subtext">扫码添加客服微信</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Bottom Spacer -->
+  <view class="bottom-spacer"></view>
+</view>

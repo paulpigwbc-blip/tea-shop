@@ -1,0 +1,19 @@
+/* pages/settings/settings.wxss */
+.settings-page { background: #F5F5F5; min-height: 100vh; padding: 16rpx; }
+.form-card { background: #ffffff; border-radius: 16rpx; padding: 24rpx; }
+.form-item { margin-bottom: 24rpx; }
+.form-label { display: block; font-size: 28rpx; color: #333333; font-weight: bold; margin-bottom: 12rpx; }
+.form-input { background: #F5F5F5; border-radius: 8rpx; padding: 20rpx; font-size: 28rpx; color: #333333; }
+.form-textarea { background: #F5F5F5; border-radius: 10rpx; padding: 24rpx; font-size: 30rpx; color: #333333; width: 100%; height: 140rpx; }
+.toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 10rpx 0; }
+.toggle-status { font-size: 28rpx; font-weight: bold; }
+.toggle-status.open { color: #5B7744; }
+.toggle-status.closed { color: #E54D42; }
+.toggle-switch { width: 80rpx; height: 44rpx; border-radius: 22rpx; position: relative; transition: all 0.3s; }
+.toggle-switch.on { background: #5B7744; }
+.toggle-switch.off { background: #CCCCCC; }
+.toggle-knob { width: 40rpx; height: 40rpx; border-radius: 50%; background: #ffffff; position: absolute; top: 2rpx; transition: all 0.3s; box-shadow: 0 2rpx 4rpx rgba(0,0,0,0.1); }
+.toggle-switch.on .toggle-knob { left: 38rpx; }
+.toggle-switch.off .toggle-knob { left: 2rpx; }
+.save-btn { background: #8B6914; color: #ffffff; text-align: center; padding: 32rpx; border-radius: 12rpx; margin-top: 30rpx; font-size: 34rpx; font-weight: bold; }
+.save-btn::after { border: none; }

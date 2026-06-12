@@ -1,0 +1,40 @@
+/* pages/products/products.wxss */
+.products-page { background: #F5F5F5; min-height: 100vh; display: flex; flex-direction: column; }
+
+/* Filter Bar */
+.filter-bar { background: #ffffff; flex-shrink: 0; border-bottom: 1rpx solid #EEEEEE; }
+.filter-row { display: flex; padding: 20rpx 24rpx; gap: 20rpx; }
+.filter-group { flex: 1; display: flex; flex-direction: column; }
+.filter-label { font-size: 24rpx; color: #999999; margin-bottom: 10rpx; }
+.filter-picker { width: 100%; }
+.filter-select { display: flex; align-items: center; justify-content: space-between; padding: 18rpx 24rpx; border-radius: 12rpx; font-size: 30rpx; color: #333333; background: #F5F5F5; border: 1rpx solid #E0E0E0; }
+.select-arrow { font-size: 22rpx; color: #999999; margin-left: 8rpx; }
+
+/* Product List */
+.product-scroll { flex: 1; padding: 16rpx; }
+.product-card { background: #ffffff; border-radius: 16rpx; margin-bottom: 12rpx; padding: 20rpx; box-shadow: 0 2rpx 8rpx rgba(0,0,0,0.04); }
+.product-info { display: flex; align-items: center; }
+.product-img { width: 120rpx; height: 120rpx; border-radius: 12rpx; background: linear-gradient(135deg, #E8DCC8, #D4C4A8); display: flex; align-items: center; justify-content: center; margin-right: 20rpx; flex-shrink: 0; overflow: hidden; }
+.img-text { font-size: 40rpx; color: rgba(139, 105, 20, 0.2); font-weight: bold; }
+.product-img-real { width: 100%; height: 100%; }
+.product-detail { flex: 1; }
+.product-name { display: block; font-size: 32rpx; font-weight: bold; color: #333333; margin-bottom: 6rpx; }
+.product-category { display: block; font-size: 26rpx; color: #999999; margin-bottom: 10rpx; }
+.product-meta { display: flex; gap: 16rpx; }
+.product-price { font-size: 30rpx; color: #E54D42; font-weight: bold; }
+.product-stock { font-size: 26rpx; color: #999999; }
+.product-sales { font-size: 26rpx; color: #999999; }
+.product-actions { display: flex; justify-content: flex-end; gap: 16rpx; margin-top: 20rpx; padding-top: 16rpx; border-top: 1rpx solid #F5F5F5; }
+.status-btn { padding: 14rpx 32rpx; border-radius: 10rpx; font-size: 28rpx; }
+.status-btn.active { background: rgba(91, 119, 68, 0.1); color: #5B7744; }
+.status-btn.hidden { background: rgba(153, 153, 153, 0.1); color: #999999; }
+.edit-btn { padding: 14rpx 32rpx; border-radius: 10rpx; font-size: 28rpx; background: rgba(139, 105, 20, 0.1); color: #8B6914; }
+
+/* Empty state */
+.empty-state { padding: 200rpx 0; text-align: center; }
+.empty-text { font-size: 30rpx; color: #999999; }
+.bottom-spacer { height: 120rpx; }
+
+/* FAB */
+.fab-btn { position: fixed; bottom: 140rpx; right: 30rpx; width: 120rpx; height: 120rpx; border-radius: 50%; background: #8B6914; color: #ffffff; font-size: 56rpx; display: flex; align-items: center; justify-content: center; box-shadow: 0 4rpx 20rpx rgba(139, 105, 20, 0.4); }
+.fab-btn::after { border: none; }

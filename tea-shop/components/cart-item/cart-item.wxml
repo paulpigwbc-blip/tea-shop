@@ -1,0 +1,40 @@
+<!-- components/cart-item/cart-item.wxml -->
+<view class="cart-item-component">
+  <!-- Checkbox -->
+  <view class="item-checkbox" bindtap="onToggleCheck">
+    <view class="checkbox-circle {{item.checked ? 'checked' : ''}}">
+      <text wx:if="{{item.checked}}">✓</text>
+    </view>
+  </view>
+
+  <!-- Product Image -->
+  <view class="item-img">
+    <image class="item-img-real" wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFill" />
+    <view class="item-placeholder" wx:else style="background: linear-gradient(135deg, {{item.id % 2 === 0 ? '#E8DCC8, #D4C4A8' : '#C8D8B8, #A8C090'}});">
+      <text class="item-placeholder-char">{{item.name[0]}}</text>
+    </view>
+  </view>
+
+  <!-- Product Info -->
+  <view class="item-info">
+    <text class="item-name">{{item.name}}</text>
+    <text class="item-desc">{{item.desc}}</text>
+    <view class="item-bottom">
+      <text class="item-price">¥{{item.price}}</text>
+      <view class="item-qty-control">
+        <view class="item-qty-btn" bindtap="onDecrease">
+          <text>-</text>
+        </view>
+        <text class="item-qty-num">{{item.quantity}}</text>
+        <view class="item-qty-btn" bindtap="onIncrease">
+          <text>+</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Delete -->
+  <view class="item-delete" bindtap="onDelete">
+    <text>✕</text>
+  </view>
+</view>

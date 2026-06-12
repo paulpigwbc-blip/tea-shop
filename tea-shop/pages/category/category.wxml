@@ -1,0 +1,70 @@
+<!-- pages/category/category.wxml -->
+<view class="category-page">
+
+  <!-- Top Bar: Search -->
+  <view class="top-bar">
+    <view class="search-bar">
+      <view class="search-input-wrap">
+        <text class="search-icon">🔍</text>
+        <input class="search-input" placeholder="搜索茶叶" placeholder-class="search-placeholder"
+               value="{{searchText}}" bindinput="onSearchInput" bindconfirm="onSearch" confirm-type="search" />
+        <text class="search-clear" wx:if="{{searchText}}" bindtap="clearSearch">✕</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Content: Left Sidebar + Right Product Grid -->
+  <view class="content-area">
+    <!-- Left Category Sidebar -->
+    <scroll-view class="category-sidebar" scroll-y enhanced show-scrollbar="{{false}}">
+      <view class="category-item {{activeCategory === index ? 'active' : ''}}"
+            wx:for="{{categories}}" wx:key="index"
+            bindtap="selectCategory" data-index="{{index}}">
+        <text class="category-name">{{item}}</text>
+        <view class="category-indicator" wx:if="{{activeCategory === index}}"></view>
+      </view>
+    </scroll-view>
+
+    <!-- Right Product Grid -->
+    <scroll-view class="product-area" scroll-y enhanced show-scrollbar="{{false}}">
+      <view class="product-grid">
+        <view class="product-card" wx:for="{{filteredProducts}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
+          <view class="product-img-wrap">
+            <image wx:if="{{item.image}}" class="product-img-real" src="{{item.image}}" mode="aspectFill" />
+            <view wx:else class="product-placeholder" style="background: linear-gradient(135deg, {{item.id % 2 === 0 ? '#E8DCC8, #D4C4A8' : '#C8D8B8, #A8C090'}});">
+              <text class="product-placeholder-text">{{item.name[0]}}</text>
+            </view>
+          </view>
+          <view class="product-info">
+            <text class="product-name">{{item.name}}</text>
+            <text class="product-desc">{{item.desc}}</text>
+            <view class="product-bottom">
+              <view class="product-price-row">
+                <text class="product-price-symbol">¥</text>
+                <text class="product-price">{{item.price}}</text>
+              </view>
+              <view class="product-qty-control">
+                <view class="qty-btn minus-btn {{quantityMap[item.id] > 0 ? '' : 'hidden'}}"
+                      bindtap="decreaseQty" data-id="{{item.id}}">
+                  <text>-</text>
+                </view>
+                <text class="qty-num" wx:if="{{quantityMap[item.id] > 0}}">{{quantityMap[item.id]}}</text>
+                <view class="qty-btn plus-btn" bindtap="increaseQty" data-id="{{item.id}}">
+                  <text>+</text>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+
+      <!-- Empty state -->
+      <view class="empty-state" wx:if="{{filteredProducts.length === 0}}">
+        <text class="empty-text">暂无相关商品</text>
+      </view>
+
+      <!-- Bottom spacing -->
+      <view class="bottom-spacer"></view>
+    </scroll-view>
+  </view>
+</view>

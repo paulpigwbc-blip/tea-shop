@@ -1,0 +1,58 @@
+<!-- pages/product-edit/product-edit.wxml -->
+<view class="edit-page">
+  <!-- Image Upload Section -->
+  <view class="form-card">
+    <view class="form-label">商品图片</view>
+    <view class="image-grid">
+      <view class="img-item" wx:for="{{imageList}}" wx:key="index">
+        <image class="img-preview" src="{{item.url}}" mode="aspectFill" />
+        <view class="img-cover-tag" wx:if="{{item.isCover}}">
+          <text>封面</text>
+        </view>
+        <view class="img-cover-btn" wx:if="{{!item.isCover}}" bindtap="setCoverImage" data-index="{{index}}">
+          <text>设封面</text>
+        </view>
+        <view class="img-delete-btn" bindtap="deleteImage" data-index="{{index}}">
+          <text>x</text>
+        </view>
+      </view>
+      <view class="img-add-btn" bindtap="chooseImage" wx:if="{{imageList.length < 9}}">
+        <text class="add-icon">+</text>
+        <text class="add-text">添加图片</text>
+      </view>
+    </view>
+    <text class="image-tip">点击"设封面"指定首页展示图片，最多9张</text>
+  </view>
+
+  <view class="form-card">
+    <view class="form-item">
+      <text class="form-label">商品名称 *</text>
+      <input class="form-input" placeholder="请输入商品名称" value="{{product.name}}" bindinput="onInput" data-field="name" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">分类 *</text>
+      <picker mode="selector" range="{{categories}}" bindchange="onCategoryChange">
+        <view class="form-picker">
+          <text class="{{product.category ? '' : 'placeholder'}}">{{product.category || '请选择分类'}}</text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+    <view class="form-item">
+      <text class="form-label">价格 *</text>
+      <input class="form-input" type="digit" placeholder="请输入价格" value="{{product.price}}" bindinput="onInput" data-field="price" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">库存</text>
+      <input class="form-input" type="number" placeholder="请输入库存数量" value="{{product.stock}}" bindinput="onInput" data-field="stock" />
+    </view>
+    <view class="form-item">
+      <text class="form-label">描述</text>
+      <textarea class="form-textarea" placeholder="请输入商品描述" value="{{product.description}}" bindinput="onInput" data-field="description" />
+    </view>
+  </view>
+
+  <view class="save-btn" bindtap="saveProduct">
+    <text>保存</text>
+  </view>
+</view>

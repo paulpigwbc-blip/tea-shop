@@ -1,0 +1,130 @@
+<!-- pages/order-detail/order-detail.wxml -->
+<view class="detail-page" wx:if="{{order}}">
+
+  <!-- Status Banner -->
+  <view class="status-banner" style="background: linear-gradient(135deg, {{statusColor}}, {{statusColor}}dd);">
+    <text class="status-text">{{statusText}}</text>
+    <text class="status-desc" wx:if="{{order.status === 'pending'}}">订单待付款，请尽快完成支付</text>
+    <text class="status-desc" wx:if="{{order.status === 'paid'}}">已支付，等待商家发货</text>
+    <text class="status-desc" wx:if="{{order.status === 'shipped'}}">商家已发货，请注意查收</text>
+    <text class="status-desc" wx:if="{{order.status === 'completed'}}">感谢您的购买</text>
+    <text class="status-desc" wx:if="{{order.status === 'cancelled'}}">订单已取消</text>
+  </view>
+
+  <!-- Order Info Card -->
+  <view class="info-card">
+    <view class="info-row">
+      <text class="info-label">订单编号</text>
+      <text class="info-value">{{order.orderNo}}</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">下单时间</text>
+      <text class="info-value">{{formattedDate}}</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">配送方式</text>
+      <text class="info-value">快递配送</text>
+    </view>
+    <view class="info-row" wx:if="{{order.note}}">
+      <text class="info-label">订单备注</text>
+      <text class="info-value">{{order.note}}</text>
+    </view>
+  </view>
+
+  <!-- Delivery Address -->
+  <view class="address-card" wx:if="{{order.type === 'delivery' && order.address}}">
+    <view class="card-title">
+      <text class="card-title-icon">📍</text>
+      <text>收货地址</text>
+    </view>
+    <text class="addr-name">{{order.address.name}} {{order.address.phone}}</text>
+    <text class="addr-detail">{{order.address.province}}{{order.address.city}}{{order.address.district}}{{order.address.detail}}</text>
+  </view>
+
+  <!-- Order Items -->
+  <view class="items-card">
+    <view class="card-title">
+      <text class="card-title-icon">🛍</text>
+      <text>商品详情</text>
+    </view>
+    <view class="item-row" wx:for="{{order.items}}" wx:key="productId" bindtap="goToProductDetail" data-id="{{item.productId}}">
+      <view class="item-img">
+        <image class="item-img-real" wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFill" />
+        <view class="item-placeholder" wx:else style="background: linear-gradient(135deg, {{item.productId % 2 === 0 ? '#E8DCC8, #D4C4A8' : '#C8D8B8, #A8C090'}});">
+          <text class="placeholder-text">{{item.name[0]}}</text>
+        </view>
+      </view>
+      <view class="item-info">
+        <text class="item-name">{{item.name}}</text>
+        <text class="item-qty">x{{item.quantity}}</text>
+      </view>
+      <text class="item-price">¥{{item.price * item.quantity}}</text>
+    </view>
+    <view class="total-row">
+      <text class="total-label">实付金额</text>
+      <text class="total-price">¥{{order.totalPrice}}</text>
+    </view>
+  </view>
+
+  <!-- Action Buttons -->
+  <view class="action-section">
+    <view class="action-btn pay-action" wx:if="{{order.status === 'pending'}}" bindtap="payOrder">
+      <text>立即付款</text>
+    </view>
+    <view class="action-btn cancel-action" wx:if="{{order.status === 'pending'}}" bindtap="cancelOrder">
+      <text>取消订单</text>
+    </view>
+    <view class="action-btn confirm-action" wx:if="{{order.status === 'shipped'}}" bindtap="confirmReceipt">
+      <text>确认收货</text>
+    </view>
+    <view class="action-btn reorder-action" wx:if="{{order.status === 'completed' || order.status === 'cancelled'}}" bindtap="reorder">
+      <text>再来一单</text>
+    </view>
+    <view class="action-btn list-action" bindtap="goToOrderList">
+      <text>查看全部订单</text>
+    </view>
+  </view>
+
+  <!-- Mock Payment Popup -->
+  <view class="payment-mask" wx:if="{{showPayPopup}}" bindtap="closePayPopup">
+    <view class="payment-popup" catchtap>
+      <!-- Popup Header -->
+      <view class="pay-popup-header">
+        <text class="pay-popup-title">确认支付</text>
+        <view class="pay-popup-close" bindtap="closePayPopup">
+          <text>&times;</text>
+        </view>
+      </view>
+      <!-- Amount -->
+      <view class="pay-amount-section">
+        <text class="pay-amount-label">支付金额</text>
+        <view class="pay-amount-value">
+          <text class="pay-amount-symbol">¥</text>
+          <text class="pay-amount-num">{{order.totalPrice}}</text>
+        </view>
+      </view>
+      <!-- Payment Method -->
+      <view class="pay-method-section">
+        <text class="pay-method-label">支付方式</text>
+        <view class="pay-method-item pay-method-selected">
+          <view class="pay-method-icon wechat-icon">
+            <text class="wechat-pay-text">W</text>
+          </view>
+          <view class="pay-method-info">
+            <text class="pay-method-name">微信支付</text>
+            <text class="pay-method-desc">模拟支付 (测试)</text>
+          </view>
+          <view class="pay-method-check">
+            <text>&#10003;</text>
+          </view>
+        </view>
+      </view>
+      <!-- Pay Button -->
+      <view class="pay-popup-btn {{payProcessing ? 'disabled' : ''}}" bindtap="confirmMockPay">
+        <text wx:if="{{!payProcessing && !paySuccess}}">确认支付</text>
+        <text wx:if="{{payProcessing}}">支付处理中...</text>
+        <text wx:if="{{paySuccess}}">支付成功</text>
+      </view>
+    </view>
+  </view>
+</view>

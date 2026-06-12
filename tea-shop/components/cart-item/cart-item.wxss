@@ -1,0 +1,147 @@
+/* components/cart-item/cart-item.wxss */
+
+.cart-item-component {
+  display: flex;
+  align-items: center;
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 20rpx;
+  margin-bottom: 16rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+  position: relative;
+}
+
+/* Checkbox */
+.item-checkbox {
+  padding: 10rpx;
+  flex-shrink: 0;
+}
+
+.checkbox-circle {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  border: 2rpx solid #CCCCCC;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  color: #ffffff;
+}
+
+.checkbox-circle.checked {
+  background: #8B6914;
+  border-color: #8B6914;
+}
+
+/* Image */
+.item-img {
+  width: 160rpx;
+  height: 160rpx;
+  border-radius: 12rpx;
+  overflow: hidden;
+  flex-shrink: 0;
+  margin: 0 16rpx;
+}
+
+.item-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.item-img-real {
+  width: 100%;
+  height: 100%;
+}
+
+.item-placeholder-char {
+  font-size: 48rpx;
+  color: rgba(139, 105, 20, 0.2);
+  font-weight: bold;
+}
+
+/* Info */
+.item-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.item-name {
+  display: block;
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333333;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 6rpx;
+}
+
+.item-desc {
+  display: block;
+  font-size: 22rpx;
+  color: #999999;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 16rpx;
+}
+
+.item-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.item-price {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #E54D42;
+}
+
+/* Quantity Control */
+.item-qty-control {
+  display: flex;
+  align-items: center;
+  border: 1rpx solid #EEEEEE;
+  border-radius: 8rpx;
+  overflow: hidden;
+}
+
+.item-qty-btn {
+  width: 52rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #F5F5F5;
+  font-size: 28rpx;
+  color: #666666;
+}
+
+.item-qty-num {
+  min-width: 52rpx;
+  text-align: center;
+  font-size: 26rpx;
+  color: #333333;
+  background: #ffffff;
+  height: 48rpx;
+  line-height: 48rpx;
+}
+
+/* Delete */
+.item-delete {
+  position: absolute;
+  top: 10rpx;
+  right: 10rpx;
+  width: 44rpx;
+  height: 44rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22rpx;
+  color: #CCCCCC;
+}

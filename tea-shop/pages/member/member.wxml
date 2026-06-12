@@ -1,0 +1,49 @@
+<!-- pages/member/member.wxml -->
+<view class="member-page">
+
+  <!-- Profile Header -->
+  <view class="profile-header">
+    <view class="profile-bg"></view>
+    <view class="profile-content">
+      <!-- Login State -->
+      <block wx:if="{{isLogin}}">
+        <view class="avatar-wrap">
+          <view class="avatar-placeholder">
+            <text class="avatar-text">{{userInfo.nickName[0]}}</text>
+          </view>
+        </view>
+        <text class="nickname">{{userInfo.nickName}}</text>
+      </block>
+
+      <!-- Not Login State -->
+      <block wx:else>
+        <view class="avatar-wrap" bindtap="handleLogin">
+          <view class="avatar-placeholder">
+            <text class="avatar-text">👤</text>
+          </view>
+        </view>
+        <text class="login-text" bindtap="handleLogin">点击登录</text>
+        <text class="login-hint">登录后享受更多服务</text>
+      </block>
+    </view>
+  </view>
+
+  <!-- Menu List -->
+  <view class="menu-section">
+    <view class="menu-item" wx:for="{{menuList}}" wx:key="key"
+          bindtap="onMenuTap" data-key="{{item.key}}">
+      <view class="menu-left">
+        <view class="menu-icon-wrap {{item.iconBg}}">
+          <text class="menu-emoji">{{item.icon}}</text>
+        </view>
+        <text class="menu-name">{{item.name}}</text>
+      </view>
+      <view class="menu-right">
+        <text class="menu-arrow">›</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Bottom Spacer -->
+  <view class="bottom-spacer"></view>
+</view>

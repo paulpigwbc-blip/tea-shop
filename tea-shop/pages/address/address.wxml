@@ -1,0 +1,50 @@
+<!-- pages/address/address.wxml -->
+<view class="address-page">
+
+  <!-- Address List -->
+  <view class="address-list" wx:if="{{addresses.length > 0}}">
+    <view class="address-card {{selectMode ? 'selectable' : ''}}" wx:for="{{addresses}}" wx:key="id"
+          bindtap="selectAddress" data-id="{{item.id}}">
+      <!-- Default Badge -->
+      <view class="default-badge" wx:if="{{item.isDefault}}">
+        <text>默认</text>
+      </view>
+
+      <view class="address-info">
+        <view class="address-top">
+          <text class="address-name">{{item.name}}</text>
+          <text class="address-phone">{{item.phone}}</text>
+        </view>
+        <text class="address-detail">{{item.province}}{{item.city}}{{item.district}}{{item.detail}}</text>
+      </view>
+
+      <view class="address-actions">
+        <view class="action-btn" catchtap="setDefault" data-id="{{item.id}}" wx:if="{{!item.isDefault}}">
+          <text>设为默认</text>
+        </view>
+        <view class="action-btn" catchtap="editAddress" data-id="{{item.id}}">
+          <text>编辑</text>
+        </view>
+        <view class="action-btn delete-btn" catchtap="deleteAddress" data-id="{{item.id}}">
+          <text>删除</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Empty State -->
+  <view class="empty-address" wx:if="{{addresses.length === 0}}">
+    <view class="empty-icon">
+      <text class="empty-icon-text">📍</text>
+    </view>
+    <text class="empty-text">暂无收货地址</text>
+    <text class="empty-subtext">添加一个收货地址吧</text>
+  </view>
+
+  <!-- Bottom Add Button -->
+  <view class="add-address-bar safe-bottom">
+    <view class="add-btn" bindtap="addAddress">
+      <text>+ 新增收货地址</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,78 @@
+<!-- pages/cart/cart.wxml -->
+<view class="cart-page">
+
+  <!-- Cart with items -->
+  <view class="cart-content" wx:if="{{cartItems.length > 0}}">
+    <!-- Cart Item List -->
+    <scroll-view class="cart-list" scroll-y enhanced show-scrollbar="{{false}}">
+      <view class="cart-item" wx:for="{{cartItems}}" wx:key="id">
+        <!-- Checkbox -->
+        <view class="cart-checkbox" bindtap="toggleCheck" data-id="{{item.id}}">
+          <view class="checkbox-icon {{item.checked ? 'checked' : ''}}">
+            <text wx:if="{{item.checked}}">✓</text>
+          </view>
+        </view>
+
+        <!-- Product Image -->
+        <view class="cart-item-img" bindtap="goToDetail" data-id="{{item.id}}">
+          <image wx:if="{{item.image}}" class="cart-img-real" src="{{item.image}}" mode="aspectFill" />
+          <view wx:else class="cart-img-placeholder" style="background: linear-gradient(135deg, {{item.id % 2 === 0 ? '#E8DCC8, #D4C4A8' : '#C8D8B8, #A8C090'}});">
+            <text class="cart-placeholder-text">{{item.name[0]}}</text>
+          </view>
+        </view>
+
+        <!-- Product Info -->
+        <view class="cart-item-info" bindtap="goToDetail" data-id="{{item.id}}">
+          <text class="cart-item-name">{{item.name}}</text>
+          <text class="cart-item-desc">{{item.desc}}</text>
+          <view class="cart-item-bottom">
+            <text class="cart-item-price">¥{{item.price}}</text>
+            <view class="cart-qty-control">
+              <view class="cart-qty-btn" bindtap="decreaseQty" data-id="{{item.id}}">
+                <text>-</text>
+              </view>
+              <text class="cart-qty-num">{{item.quantity}}</text>
+              <view class="cart-qty-btn" bindtap="increaseQty" data-id="{{item.id}}">
+                <text>+</text>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <!-- Delete Button -->
+        <view class="cart-delete-btn" bindtap="onDeleteItem" data-id="{{item.id}}">
+          <text>✕</text>
+        </view>
+      </view>
+    </scroll-view>
+
+    <!-- Bottom Bar -->
+    <view class="cart-bottom-bar safe-bottom">
+      <view class="select-all" bindtap="toggleSelectAll">
+        <view class="checkbox-icon {{isAllChecked ? 'checked' : ''}}">
+          <text wx:if="{{isAllChecked}}">✓</text>
+        </view>
+        <text class="select-all-text">全选</text>
+      </view>
+      <view class="cart-total">
+        <text class="total-label">合计：</text>
+        <text class="total-price">¥{{totalPrice}}</text>
+      </view>
+      <view class="checkout-btn {{totalCount === 0 ? 'disabled' : ''}}" bindtap="checkout">
+        <text>结算{{totalCount > 0 ? '(' + totalCount + ')' : ''}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Empty Cart State -->
+  <view class="empty-cart" wx:if="{{cartItems.length === 0}}">
+    <view class="empty-cart-icon">
+      <text class="empty-icon-text">🛒</text>
+    </view>
+    <text class="empty-cart-text">购物车是空的</text>
+    <text class="empty-cart-subtext">去逛逛，发现好茶</text>
+    <view class="go-shopping-btn" bindtap="goShopping">
+      <text>去选购</text>
+    </view>
+  </view>
+</view>

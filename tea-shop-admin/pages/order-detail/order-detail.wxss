@@ -1,0 +1,80 @@
+/* pages/order-detail/order-detail.wxss */
+.detail-page { background: #F5F5F5; min-height: 100vh; }
+.status-bar { background: #1A2818; padding: 40rpx 30rpx; }
+.status-text { color: #ffffff; font-size: 36rpx; font-weight: bold; }
+
+/* Recipient Address Card */
+.address-card {
+  background: #ffffff;
+  border-radius: 16rpx;
+  margin: -16rpx 16rpx 16rpx;
+  padding: 24rpx;
+  position: relative;
+  z-index: 10;
+}
+
+.address-card .card-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.card-title-icon {
+  font-size: 32rpx;
+  margin-right: 10rpx;
+}
+
+.copy-btn {
+  margin-left: auto;
+  padding: 10rpx 24rpx;
+  border: 2rpx solid #8B6914;
+  border-radius: 24rpx;
+  font-size: 26rpx;
+  color: #8B6914;
+}
+
+.recipient-row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.recipient-name {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-right: 24rpx;
+}
+
+.recipient-phone {
+  font-size: 28rpx;
+  color: #666666;
+}
+
+.recipient-address {
+  font-size: 28rpx;
+  color: #666666;
+  line-height: 1.5;
+}
+
+.info-card { background: #ffffff; border-radius: 16rpx; margin: 0 16rpx 16rpx; padding: 24rpx; }
+.info-row { display: flex; justify-content: space-between; padding: 12rpx 0; border-bottom: 1rpx solid #F5F5F5; }
+.info-row:last-child { border-bottom: none; }
+.info-label { font-size: 28rpx; color: #999999; }
+.info-value { font-size: 28rpx; color: #333333; }
+.items-card { background: #ffffff; border-radius: 16rpx; margin: 0 16rpx 16rpx; padding: 24rpx; }
+.card-title { font-size: 30rpx; font-weight: bold; color: #333333; margin-bottom: 16rpx; }
+.item-row { display: flex; align-items: center; padding: 10rpx 0; border-bottom: 1rpx solid #F5F5F5; }
+.item-name { flex: 1; font-size: 30rpx; color: #333333; }
+.item-qty { font-size: 26rpx; color: #999999; margin-right: 20rpx; }
+.item-price { font-size: 30rpx; color: #333333; font-weight: 500; }
+.total-row { display: flex; justify-content: space-between; padding-top: 16rpx; margin-top: 8rpx; border-top: 2rpx solid #EEEEEE; font-size: 30rpx; color: #333333; }
+.total-price { font-size: 36rpx; font-weight: bold; color: #E54D42; }
+.action-bar { display: flex; gap: 12rpx; padding: 16rpx; }
+.action-btn { flex: 1; text-align: center; padding: 28rpx 0; border-radius: 12rpx; font-size: 32rpx; font-weight: bold; }
+.action-btn::after { border: none; }
+.btn-accept { background: #8B6914; color: #ffffff; }
+.btn-prepare { background: #5B7744; color: #ffffff; }
+.btn-ship { background: #C4A862; color: #ffffff; }
+.btn-complete { background: #999999; color: #ffffff; }
+.btn-reject { background: #F5F5F5; color: #E54D42; }

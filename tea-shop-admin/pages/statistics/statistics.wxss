@@ -1,0 +1,314 @@
+/* pages/statistics/statistics.wxss */
+.stats-page {
+  background: #F5F5F5;
+  min-height: 100vh;
+}
+
+/* ===== Revenue Summary Cards ===== */
+.revenue-section {
+  padding: 20rpx 16rpx 0;
+}
+
+.revenue-cards {
+  display: flex;
+  gap: 12rpx;
+}
+
+.rev-card {
+  flex: 1;
+  background: #ffffff;
+  border-radius: 16rpx;
+  padding: 24rpx 16rpx;
+  text-align: center;
+}
+
+.rev-label {
+  display: block;
+  font-size: 24rpx;
+  color: #999999;
+  margin-bottom: 10rpx;
+}
+
+.rev-amount {
+  display: block;
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 6rpx;
+}
+
+.rev-count {
+  font-size: 22rpx;
+  color: #BBBBBB;
+}
+
+.rev-today {
+  border-top: 4rpx solid #E54D42;
+}
+
+.rev-week {
+  border-top: 4rpx solid #FF9800;
+}
+
+.rev-month {
+  border-top: 4rpx solid #5B7744;
+}
+
+/* ===== Section Title ===== */
+.section-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 20rpx;
+}
+
+/* ===== Revenue Trend Bar Chart ===== */
+.chart-section {
+  background: #ffffff;
+  margin: 16rpx;
+  border-radius: 16rpx;
+  padding: 24rpx;
+}
+
+.bar-chart {
+  display: flex;
+  align-items: flex-end;
+  height: 300rpx;
+  padding-top: 30rpx;
+}
+
+.bar-col {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+}
+
+.bar-wrapper {
+  flex: 1;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.bar-value {
+  font-size: 18rpx;
+  color: #8B6914;
+  margin-bottom: 6rpx;
+}
+
+.bar-fill {
+  width: 36rpx;
+  min-height: 4rpx;
+  background: linear-gradient(180deg, #8B6914, #C4A862);
+  border-radius: 6rpx 6rpx 0 0;
+}
+
+.bar-label {
+  font-size: 20rpx;
+  color: #999999;
+  margin-top: 10rpx;
+}
+
+/* ===== Key Metrics ===== */
+.metrics-section {
+  background: #ffffff;
+  margin: 0 16rpx 16rpx;
+  border-radius: 16rpx;
+  padding: 24rpx;
+}
+
+.metrics-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+}
+
+.metric-item {
+  width: 48%;
+  background: #F8F8F8;
+  border-radius: 12rpx;
+  padding: 20rpx 16rpx;
+  text-align: center;
+}
+
+.metric-value {
+  display: block;
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 6rpx;
+}
+
+.metric-label {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+/* ===== Category Breakdown ===== */
+.category-section {
+  background: #ffffff;
+  margin: 0 16rpx 16rpx;
+  border-radius: 16rpx;
+  padding: 24rpx;
+}
+
+.category-item {
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.category-item:last-child {
+  border-bottom: none;
+}
+
+.cat-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10rpx;
+}
+
+.cat-name {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333333;
+}
+
+.cat-revenue {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #8B6914;
+}
+
+.cat-bar-bg {
+  height: 12rpx;
+  background: #F0F0F0;
+  border-radius: 6rpx;
+  overflow: hidden;
+  margin-bottom: 8rpx;
+}
+
+.cat-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #8B6914, #C4A862);
+  border-radius: 6rpx;
+  min-width: 4rpx;
+}
+
+.cat-meta {
+  display: flex;
+  justify-content: space-between;
+}
+
+.cat-qty {
+  font-size: 22rpx;
+  color: #999999;
+}
+
+.cat-percent {
+  font-size: 22rpx;
+  color: #8B6914;
+  font-weight: bold;
+}
+
+/* ===== Product Ranking ===== */
+.ranking-section {
+  background: #ffffff;
+  margin: 0 16rpx 16rpx;
+  border-radius: 16rpx;
+  padding: 24rpx;
+}
+
+.rank-subtitle {
+  font-size: 26rpx;
+  color: #666666;
+  margin-bottom: 16rpx;
+  padding-left: 4rpx;
+}
+
+.rank-list {
+  margin-bottom: 10rpx;
+}
+
+.rank-item {
+  display: flex;
+  align-items: center;
+  padding: 14rpx 0;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.rank-item:last-child {
+  border-bottom: none;
+}
+
+.rank-index {
+  width: 44rpx;
+  height: 44rpx;
+  border-radius: 8rpx;
+  background: #F0F0F0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  color: #999999;
+  font-weight: bold;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+
+.rank-top {
+  background: #8B6914;
+  color: #ffffff;
+}
+
+.rank-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.rank-name {
+  display: block;
+  font-size: 28rpx;
+  color: #333333;
+  font-weight: 500;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.rank-detail {
+  font-size: 22rpx;
+  color: #999999;
+  margin-top: 4rpx;
+}
+
+.rank-revenue {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #E54D42;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+.rank-qty {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #5B7744;
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+.rank-empty {
+  text-align: center;
+  padding: 30rpx 0;
+  font-size: 26rpx;
+  color: #999999;
+}
+
+.bottom-spacer {
+  height: 40rpx;
+}

@@ -1,0 +1,28 @@
+<!-- components/product-card/product-card.wxml -->
+<view class="product-card" bindtap="onCardTap">
+  <view class="card-img-wrap">
+    <image class="card-img" wx:if="{{coverImage}}" src="{{coverImage}}" mode="aspectFill" />
+    <view class="card-placeholder" wx:else style="background: linear-gradient(135deg, {{product.id % 2 === 0 ? '#E8DCC8, #D4C4A8' : '#C8D8B8, #A8C090'}});">
+      <text class="placeholder-char">{{product.name[0]}}</text>
+    </view>
+  </view>
+  <view class="card-info">
+    <text class="card-name">{{product.name}}</text>
+    <text class="card-desc">{{product.desc}}</text>
+    <view class="card-bottom">
+      <view class="card-price-row">
+        <text class="card-price-symbol">¥</text>
+        <text class="card-price">{{product.price}}</text>
+      </view>
+      <view class="card-qty">
+        <view class="qty-btn minus {{quantity <= 0 ? 'hidden' : ''}}" catchtap="onMinusTap">
+          <text>-</text>
+        </view>
+        <text class="qty-text" wx:if="{{quantity > 0}}">{{quantity}}</text>
+        <view class="qty-btn plus" catchtap="onAddTap">
+          <text>+</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

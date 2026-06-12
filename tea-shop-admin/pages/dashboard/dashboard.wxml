@@ -1,0 +1,96 @@
+<!-- pages/dashboard/dashboard.wxml -->
+<view class="dashboard-page" wx:if="{{authState === 'allowed'}}">
+
+  <!-- Shop Status -->
+  <view class="shop-status-bar">
+    <view class="shop-info">
+      <text class="shop-name">茶语轩</text>
+      <text class="shop-desc">商家管理后台</text>
+    </view>
+    <view class="shop-toggle {{shopOpen ? 'open' : 'closed'}}" bindtap="toggleShop">
+      <view class="toggle-dot"></view>
+      <text>{{shopOpen ? '营业中' : '已休息'}}</text>
+    </view>
+  </view>
+
+  <!-- Stats Grid -->
+  <view class="stats-grid">
+    <view class="stat-card">
+      <text class="stat-value">{{todayOrders}}</text>
+      <text class="stat-label">今日订单</text>
+    </view>
+    <view class="stat-card" bindtap="goToStatistics">
+      <text class="stat-value">¥{{todayRevenue}}</text>
+      <text class="stat-label">今日收入 ›</text>
+    </view>
+    <view class="stat-card pending-card" bindtap="goToOrders" data-tab="1">
+      <text class="stat-value">{{paidCount}}</text>
+      <text class="stat-label">待发货</text>
+    </view>
+    <view class="stat-card">
+      <text class="stat-value">{{completedCount}}</text>
+      <text class="stat-label">已完成</text>
+    </view>
+  </view>
+
+  <!-- Order Status Overview -->
+  <view class="status-overview">
+    <view class="overview-title">订单概览</view>
+    <view class="overview-grid">
+      <view class="overview-item" bindtap="goToOrders" data-tab="1">
+        <view class="overview-dot dot-paid"></view>
+        <text class="overview-num">{{paidCount}}</text>
+        <text class="overview-label">待发货</text>
+      </view>
+      <view class="overview-item" bindtap="goToOrders" data-tab="2">
+        <view class="overview-dot dot-shipped"></view>
+        <text class="overview-num">{{shippedCount}}</text>
+        <text class="overview-label">已发货</text>
+      </view>
+      <view class="overview-item" bindtap="goToOrders" data-tab="3">
+        <view class="overview-dot dot-completed"></view>
+        <text class="overview-num">{{completedCount}}</text>
+        <text class="overview-label">已完成</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Recent Orders -->
+  <view class="recent-section">
+    <view class="section-header">
+      <text class="section-title">最新订单</text>
+      <text class="section-more" bindtap="goToOrders">查看全部 ›</text>
+    </view>
+    <view class="recent-list" wx:if="{{recentOrders.length > 0}}">
+      <view class="recent-item" wx:for="{{recentOrders}}" wx:key="_id" bindtap="goToOrder" data-id="{{item._id}}">
+        <view class="recent-info">
+          <text class="recent-no">{{item.orderNo}}</text>
+          <text class="recent-status">{{item.statusText}}</text>
+          <text class="recent-time" wx:if="{{item.timeStr}}">{{item.timeStr}}</text>
+        </view>
+        <view class="recent-bottom">
+          <text class="recent-items">{{item.items.length}}件商品</text>
+          <text class="recent-price">¥{{item.totalPrice}}</text>
+        </view>
+      </view>
+    </view>
+    <view class="recent-empty" wx:if="{{recentOrders.length === 0}}">
+      <text class="empty-text">暂无订单</text>
+    </view>
+  </view>
+
+  <view class="bottom-spacer"></view>
+</view>
+
+<!-- Auth Loading -->
+<view class="auth-loading" wx:if="{{authState === 'loading'}}">
+  <view class="deny-icon">⏳</view>
+  <text class="auth-loading-text">正在验证商家身份...</text>
+</view>
+
+<!-- Auth Denied -->
+<view class="deny-overlay" wx:if="{{authState === 'denied'}}">
+  <view class="deny-icon">🔒</view>
+  <text class="deny-title">无访问权限</text>
+  <text class="deny-desc">您不是本店管理员\n请联系商家管理员添加权限</text>
+</view>

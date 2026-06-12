@@ -1,0 +1,134 @@
+/* pages/member/member.wxss */
+
+.member-page {
+  background: #F5F5F5;
+  min-height: 100vh;
+}
+
+/* Profile Header */
+.profile-header {
+  position: relative;
+  padding: 60rpx 40rpx 80rpx;
+  overflow: hidden;
+}
+
+.profile-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, #8B6914, #6B5010, #4A380A);
+}
+
+.profile-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.avatar-wrap {
+  margin-bottom: 20rpx;
+}
+
+.avatar-placeholder {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
+}
+
+.avatar-text {
+  font-size: 60rpx;
+  color: #ffffff;
+}
+
+.nickname {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 8rpx;
+}
+
+.login-text {
+  font-size: 34rpx;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 8rpx;
+}
+
+.login-hint {
+  font-size: 24rpx;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Menu Section */
+.menu-section {
+  background: #ffffff;
+  margin: -40rpx 24rpx 0;
+  border-radius: 16rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 20rpx rgba(0, 0, 0, 0.08);
+  position: relative;
+  z-index: 10;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx 30rpx;
+  border-bottom: 1rpx solid #F5F5F5;
+}
+
+.menu-item:last-child {
+  border-bottom: none;
+}
+
+.menu-left {
+  display: flex;
+  align-items: center;
+}
+
+.menu-icon-wrap {
+  width: 72rpx;
+  height: 72rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 24rpx;
+}
+
+.menu-emoji {
+  font-size: 36rpx;
+}
+
+.order-bg { background: rgba(91, 119, 68, 0.1); }
+.address-bg { background: rgba(139, 105, 20, 0.1); }
+.settings-bg { background: rgba(102, 102, 102, 0.1); }
+.about-bg { background: rgba(196, 168, 98, 0.1); }
+
+.menu-name {
+  font-size: 30rpx;
+  color: #333333;
+}
+
+.menu-right {
+  padding: 8rpx;
+}
+
+.menu-arrow {
+  font-size: 32rpx;
+  color: #CCCCCC;
+}
+
+/* Bottom Spacer */
+.bottom-spacer {
+  height: 120rpx;
+}

@@ -1,0 +1,56 @@
+<!-- pages/address-edit/address-edit.wxml -->
+<view class="edit-page">
+
+  <!-- Form Card -->
+  <view class="form-card">
+
+    <!-- Name -->
+    <view class="form-item">
+      <text class="form-label">收货人</text>
+      <input class="form-input" placeholder="请输入收货人姓名" value="{{name}}"
+             bindinput="onInput" data-field="name" maxlength="20" />
+    </view>
+
+    <!-- Phone -->
+    <view class="form-item">
+      <text class="form-label">联系电话</text>
+      <input class="form-input" placeholder="请输入手机号码" value="{{phone}}"
+             bindinput="onInput" data-field="phone" type="number" maxlength="11" />
+    </view>
+
+    <!-- Region Picker -->
+    <view class="form-item">
+      <text class="form-label">所在地区</text>
+      <picker class="form-picker" mode="region" value="{{region}}" bindchange="onRegionChange">
+        <view class="picker-display {{regionText ? '' : 'placeholder'}}">
+          <text>{{regionText || '请选择省/市/区'}}</text>
+          <text class="picker-arrow">›</text>
+        </view>
+      </picker>
+    </view>
+
+    <!-- Detail Address -->
+    <view class="form-item detail-item">
+      <text class="form-label">详细地址</text>
+      <textarea class="form-textarea" placeholder="请输入详细地址（街道、门牌号等）"
+                value="{{detail}}" bindinput="onInput" data-field="detail"
+                maxlength="200" auto-height />
+    </view>
+  </view>
+
+  <!-- Default Switch -->
+  <view class="default-row">
+    <text class="default-label">设为默认地址</text>
+    <view class="toggle-switch {{isDefault ? 'on' : 'off'}}" bindtap="toggleDefault">
+      <view class="toggle-knob"></view>
+    </view>
+  </view>
+
+  <!-- Save Button -->
+  <view class="save-bar safe-bottom">
+    <view class="save-btn" bindtap="saveAddress">
+      <text>保存地址</text>
+    </view>
+  </view>
+
+</view>

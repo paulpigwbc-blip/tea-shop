@@ -1,0 +1,48 @@
+<!-- pages/order-detail/order-detail.wxml -->
+<view class="detail-page" wx:if="{{order}}">
+  <view class="status-bar">
+    <text class="status-text">{{statusText}}</text>
+  </view>
+
+  <!-- Recipient Address -->
+  <view class="address-card" wx:if="{{order.address}}">
+    <view class="card-title">
+      <text class="card-title-icon">📍</text>
+      <text>收货信息</text>
+      <view class="copy-btn" bindtap="copyAddress">
+        <text>复制</text>
+      </view>
+    </view>
+    <view class="recipient-row">
+      <text class="recipient-name">{{order.address.name}}</text>
+      <text class="recipient-phone">{{order.address.phone}}</text>
+    </view>
+    <text class="recipient-address">{{order.address.province}}{{order.address.city}}{{order.address.district}}{{order.address.detail}}</text>
+  </view>
+
+  <view class="info-card">
+    <view class="info-row"><text class="info-label">订单编号</text><text class="info-value">{{order.orderNo}}</text></view>
+    <view class="info-row"><text class="info-label">下单时间</text><text class="info-value">{{order.createdAt}}</text></view>
+    <view class="info-row"><text class="info-label">配送方式</text><text class="info-value">快递配送</text></view>
+    <view class="info-row"><text class="info-label">备注</text><text class="info-value">{{order.note || '无'}}</text></view>
+  </view>
+
+  <view class="items-card">
+    <view class="card-title">商品详情</view>
+    <view class="item-row" wx:for="{{order.items}}" wx:key="productId">
+      <text class="item-name">{{item.name}}</text>
+      <text class="item-qty">x{{item.quantity}}</text>
+      <text class="item-price">¥{{item.price * item.quantity}}</text>
+    </view>
+    <view class="total-row">
+      <text>合计</text>
+      <text class="total-price">¥{{order.totalPrice}}</text>
+    </view>
+  </view>
+
+  <view class="action-bar" wx:if="{{order.status !== 'completed' && order.status !== 'cancelled'}}">
+    <view class="action-btn btn-ship" wx:if="{{order.status === 'paid'}}" bindtap="updateStatus" data-status="shipped">发货</view>
+    <view class="action-btn btn-reject" wx:if="{{order.status === 'paid'}}" bindtap="updateStatus" data-status="cancelled">拒绝</view>
+    <view class="action-btn btn-complete" wx:if="{{order.status === 'shipped'}}" bindtap="updateStatus" data-status="completed">已送达</view>
+  </view>
+</view>

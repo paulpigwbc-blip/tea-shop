@@ -1,0 +1,124 @@
+<!-- pages/statistics/statistics.wxml -->
+<view class="stats-page">
+
+  <!-- Revenue Summary Cards -->
+  <view class="revenue-section">
+    <view class="revenue-cards">
+      <view class="rev-card rev-today">
+        <text class="rev-label">今日</text>
+        <text class="rev-amount">¥{{todayRevenue}}</text>
+        <text class="rev-count">{{todayOrders}}单</text>
+      </view>
+      <view class="rev-card rev-week">
+        <text class="rev-label">本周</text>
+        <text class="rev-amount">¥{{weekRevenue}}</text>
+        <text class="rev-count">{{weekOrders}}单</text>
+      </view>
+      <view class="rev-card rev-month">
+        <text class="rev-label">本月</text>
+        <text class="rev-amount">¥{{monthRevenue}}</text>
+        <text class="rev-count">{{monthOrders}}单</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Revenue Trend (7 days bar chart) -->
+  <view class="chart-section">
+    <view class="section-title">近7日收入趋势</view>
+    <view class="bar-chart">
+      <view class="bar-col" wx:for="{{trendValues}}" wx:key="index">
+        <view class="bar-wrapper">
+          <text class="bar-value" wx:if="{{item > 0}}">{{item}}</text>
+          <view class="bar-fill" style="height: {{trendMax > 0 ? (item / trendMax * 100) : 0}}%;"></view>
+        </view>
+        <text class="bar-label">{{trendLabels[index]}}</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Key Metrics -->
+  <view class="metrics-section">
+    <view class="section-title">经营指标</view>
+    <view class="metrics-grid">
+      <view class="metric-item">
+        <text class="metric-value">¥{{avgOrderValue}}</text>
+        <text class="metric-label">客单价</text>
+      </view>
+      <view class="metric-item">
+        <text class="metric-value">{{completionRate}}%</text>
+        <text class="metric-label">完成率</text>
+      </view>
+      <view class="metric-item">
+        <text class="metric-value">{{totalOrders}}</text>
+        <text class="metric-label">总订单</text>
+      </view>
+      <view class="metric-item">
+        <text class="metric-value">¥{{totalRevenue}}</text>
+        <text class="metric-label">总收入</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- Category Breakdown -->
+  <view class="category-section" wx:if="{{categoryData.length > 0}}">
+    <view class="section-title">分类销售</view>
+    <view class="category-list">
+      <view class="category-item" wx:for="{{categoryData}}" wx:key="name">
+        <view class="cat-info">
+          <text class="cat-name">{{item.name}}</text>
+          <text class="cat-revenue">{{item.revenueStr}}</text>
+        </view>
+        <view class="cat-bar-bg">
+          <view class="cat-bar-fill" style="width: {{item.percent}}%;"></view>
+        </view>
+        <view class="cat-meta">
+          <text class="cat-qty">销量 {{item.quantity}}件</text>
+          <text class="cat-percent">{{item.percent}}%</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Product Ranking -->
+  <view class="ranking-section">
+    <view class="section-title">商品排行</view>
+
+    <!-- Top Products by Revenue -->
+    <view class="rank-subtitle">销售额 TOP</view>
+    <view class="rank-list">
+      <view class="rank-item" wx:for="{{productRankByRevenue}}" wx:key="name">
+        <view class="rank-index {{index < 3 ? 'rank-top' : ''}}">
+          <text>{{index + 1}}</text>
+        </view>
+        <view class="rank-info">
+          <text class="rank-name">{{item.name}}</text>
+          <text class="rank-detail">销量 {{item.quantity}}件 · {{item.orders}}次下单</text>
+        </view>
+        <text class="rank-revenue">{{item.revenueStr}}</text>
+      </view>
+    </view>
+    <view class="rank-empty" wx:if="{{productRankByRevenue.length === 0}}">
+      <text>暂无销售数据</text>
+    </view>
+
+    <!-- Top Products by Quantity -->
+    <view class="rank-subtitle" style="margin-top: 30rpx;">销量 TOP</view>
+    <view class="rank-list">
+      <view class="rank-item" wx:for="{{productRankByQuantity}}" wx:key="name">
+        <view class="rank-index {{index < 3 ? 'rank-top' : ''}}">
+          <text>{{index + 1}}</text>
+        </view>
+        <view class="rank-info">
+          <text class="rank-name">{{item.name}}</text>
+          <text class="rank-detail">{{item.revenueStr}}</text>
+        </view>
+        <text class="rank-qty">{{item.quantity}}件</text>
+      </view>
+    </view>
+    <view class="rank-empty" wx:if="{{productRankByQuantity.length === 0}}">
+      <text>暂无销售数据</text>
+    </view>
+  </view>
+
+  <view class="bottom-spacer"></view>
+</view>

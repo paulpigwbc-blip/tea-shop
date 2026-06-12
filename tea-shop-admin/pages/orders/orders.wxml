@@ -1,0 +1,81 @@
+<!-- pages/orders/orders.wxml -->
+<view class="orders-page" wx:if="{{authState === 'allowed'}}">
+
+  <!-- Tab Bar -->
+  <view class="tab-bar">
+    <view class="tab-item {{activeTab === index ? 'active' : ''}}"
+          wx:for="{{tabs}}" wx:key="index"
+          bindtap="switchTab" data-index="{{index}}">
+      <text>{{item}}</text>
+      <view class="tab-indicator" wx:if="{{activeTab === index}}"></view>
+    </view>
+  </view>
+
+  <!-- Order List -->
+  <scroll-view class="order-scroll" scroll-y enhanced show-scrollbar="{{false}}">
+    <view class="order-card" wx:for="{{filteredOrders}}" wx:key="_id">
+      <!-- Order Header -->
+      <view class="order-header" bindtap="goToDetail" data-id="{{item._id}}">
+        <view class="order-left">
+          <text class="order-no">{{item.orderNo}}</text>
+          <text class="order-time">{{item.timeStr}}</text>
+        </view>
+        <text class="order-status">{{item.statusText}}</text>
+      </view>
+
+      <!-- Order Items -->
+      <view class="order-items" bindtap="goToDetail" data-id="{{item._id}}">
+        <view class="order-product" wx:for="{{item.items}}" wx:for-item="product" wx:key="productId">
+          <text class="product-name">{{product.name}}</text>
+          <text class="product-qty">x{{product.quantity}}</text>
+          <text class="product-price">¥{{product.price}}</text>
+        </view>
+      </view>
+
+      <!-- Order Total -->
+      <view class="order-total-row" bindtap="goToDetail" data-id="{{item._id}}">
+        <text class="total-label">合计</text>
+        <text class="total-price">¥{{item.totalPrice}}</text>
+      </view>
+
+      <!-- Quick Actions -->
+      <view class="order-actions">
+        <view class="action-btn btn-ship" wx:if="{{item.status === 'paid'}}"
+              catchtap="shipOrder" data-id="{{item._id}}">
+          <text>发货</text>
+        </view>
+        <view class="action-btn btn-reject" wx:if="{{item.status === 'paid'}}"
+              catchtap="updateStatus" data-status="cancelled" data-id="{{item._id}}">
+          <text>拒绝</text>
+        </view>
+        <view class="action-btn btn-complete" wx:if="{{item.status === 'shipped'}}"
+              catchtap="completeOrder" data-id="{{item._id}}">
+          <text>已送达</text>
+        </view>
+        <view class="action-btn btn-detail" catchtap="goToDetail" data-id="{{item._id}}">
+          <text>详情</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- Empty State -->
+    <view class="empty-state" wx:if="{{filteredOrders.length === 0}}">
+      <text class="empty-text">暂无相关订单</text>
+    </view>
+
+    <view class="bottom-spacer"></view>
+  </scroll-view>
+</view>
+
+<!-- Auth Loading -->
+<view class="auth-loading" wx:if="{{authState === 'loading'}}">
+  <view class="deny-icon">⏳</view>
+  <text class="auth-loading-text">正在验证商家身份...</text>
+</view>
+
+<!-- Auth Denied -->
+<view class="deny-overlay" wx:if="{{authState === 'denied'}}">
+  <view class="deny-icon">🔒</view>
+  <text class="deny-title">无访问权限</text>
+  <text class="deny-desc">您不是本店管理员\n请联系商家管理员添加权限</text>
+</view>
