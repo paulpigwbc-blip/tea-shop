@@ -38,9 +38,14 @@ Page({
   },
 
   loadSettings() {
-    if (wx.cloud) {
-      const db = wx.cloud.database();
-      db.collection('shop-settings').doc('shop').get().then(res => {
+    const resourceCloud = app.globalData.resourceCloud;
+    if (!resourceCloud) {
+      console.warn('[Settings] Resource cloud not available');
+      return;
+    }
+
+    const db = resourceCloud.database();
+    db.collection('shop-settings').doc('shop').get().then(res => {
         if (res.data) {
           app.globalData.shopSettings = res.data;
           this.setData({ shopSettings: res.data });
@@ -50,10 +55,6 @@ Page({
         const shopSettings = app.globalData.shopSettings || this.data.shopSettings;
         this.setData({ shopSettings });
       });
-    } else {
-      const shopSettings = app.globalData.shopSettings || this.data.shopSettings;
-      this.setData({ shopSettings });
-    }
   },
 
   onInput(e) {
@@ -68,9 +69,10 @@ Page({
 
   saveSettings() {
     const settings = this.data.shopSettings;
-    if (wx.cloud) {
+    const resourceCloud = app.globalData.resourceCloud;
+    if (resourceCloud) {
       wx.showLoading({ title: '保存中...' });
-      const db = wx.cloud.database();
+      const db = resourceCloud.database();
       db.collection('shop-settings').doc('shop').update({
         data: {
           name: settings.name,

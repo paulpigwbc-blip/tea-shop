@@ -44,6 +44,8 @@
     "tabIndent": "insertSpaces",
     "tabSize": 2
   },
-  "appid": "wx589b6eb5ff420b6a",
+  "appid": "wx21cbd999507a8fdc",
+  "cloudfunctionRoot": "cloudfunctions/",
+  "cloudfunctionTemplateRoot": "cloudfunctionTemplate/",
   "simulatorPluginLibVersion": {}
 }

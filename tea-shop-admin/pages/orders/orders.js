@@ -6,7 +6,7 @@ Page({
     authState: 'loading',
     tabs: ['全部', '待发货', '已发货', '已完成'],
     tabStatuses: ['all', 'paid', 'shipped', 'completed'],
-    activeTab: 0,
+    activeTab: 1,  // 默认显示「待发货」
     orders: [],
     filteredOrders: []
   },
@@ -49,9 +49,14 @@ Page({
   },
 
   loadOrders() {
-    if (wx.cloud) {
-      wx.showLoading({ title: '加载中...' });
-      const db = wx.cloud.database();
+    const resourceCloud = app.globalData.resourceCloud;
+    if (!resourceCloud) {
+      console.warn('[Orders] Resource cloud not available');
+      return;
+    }
+
+    wx.showLoading({ title: '加载中...' });
+    const db = resourceCloud.database();
       const _ = db.command;
       db.collection('orders')
         .orderBy('createdAt', 'desc')
@@ -70,9 +75,6 @@ Page({
           console.error('Cloud load orders error:', err);
           this._loadOrdersFallback();
         });
-    } else {
-      this._loadOrdersFallback();
-    }
   },
 
   _loadOrdersFallback() {

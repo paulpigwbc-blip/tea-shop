@@ -46,9 +46,14 @@ Page({
   },
 
   loadStatistics() {
-    if (wx.cloud) {
-      wx.showLoading({ title: '加载中...' });
-      const db = wx.cloud.database();
+    const resourceCloud = app.globalData.resourceCloud;
+    if (!resourceCloud) {
+      console.warn('[Statistics] Resource cloud not available');
+      return;
+    }
+
+    wx.showLoading({ title: '加载中...' });
+    const db = resourceCloud.database();
       // Fetch all paid+ orders (max 1000 — enough for small shop)
       db.collection('orders')
         .where({ status: db.command.in(['paid', 'shipped', 'completed']) })
@@ -64,11 +69,6 @@ Page({
           console.error('Load statistics error:', err);
           this._processData([]);
         });
-    } else {
-      const orders = (wx.getStorageSync('orders') || [])
-        .filter(o => ['paid', 'shipped', 'completed'].includes(o.status));
-      this._processData(orders);
-    }
   },
 
   _processData(orders) {
@@ -174,8 +174,9 @@ Page({
 
   // Enrich product data with category info from products collection
   _enrichWithCategories(productMap, orders) {
-    if (!wx.cloud) return;
-    const db = wx.cloud.database();
+    const resourceCloud = app.globalData.resourceCloud;
+    if (!resourceCloud) return;
+    const db = resourceCloud.database();
     db.collection('products').limit(200).get().then(res => {
       const products = res.data || [];
       const categoryMap = {};

@@ -39,7 +39,9 @@ const categories = [
 ];
 
 exports.main = async (event, context) => {
-  const { OPENID } = cloud.getWXContext();
+  const wxContext = cloud.getWXContext();
+  // 跨账号环境共享时，使用 FROM_OPENID 而不是 OPENID
+  const OPENID = wxContext.FROM_OPENID || wxContext.OPENID;
   const results = { products: 0, categories: 0, shopSettings: false };
 
   // 1. Add products

@@ -6,7 +6,10 @@ cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
 
 exports.main = async (event, context) => {
-  const { OPENID } = cloud.getWXContext();
+  const wxContext = cloud.getWXContext();
+  // 跨账号环境共享时，使用 FROM_OPENID 而不是 OPENID
+  const OPENID = wxContext.FROM_OPENID || wxContext.OPENID;
+  
   if (!OPENID) {
     return { code: -1, message: '身份验证失败' };
   }

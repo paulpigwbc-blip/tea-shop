@@ -44,9 +44,15 @@ Page({
   },
 
   loadDashboard() {
-    if (wx.cloud) {
-      this.setData({ loading: true });
-      wx.cloud.callFunction({
+    const resourceCloud = app.globalData.resourceCloud;
+    if (!resourceCloud) {
+      console.warn('[Dashboard] Resource cloud not available');
+      this._loadFallback();
+      return;
+    }
+
+    this.setData({ loading: true });
+    resourceCloud.callFunction({
         name: 'getStatistics',
         success: (res) => {
           if (res.result && res.result.code === 0) {
@@ -61,9 +67,6 @@ Page({
           this._loadDirectDB();
         }
       });
-    } else {
-      this._loadFallback();
-    }
 
     // Load shop settings from cloud DB
     this._loadShopSettings();
@@ -90,8 +93,9 @@ Page({
 
   // Direct DB query fallback (bypasses getStatistics cloud function)
   _loadDirectDB() {
-    if (!wx.cloud) return this._loadFallback();
-    const db = wx.cloud.database();
+    const resourceCloud = app.globalData.resourceCloud;
+    if (!resourceCloud) return this._loadFallback();
+    const db = resourceCloud.database();
     const _ = db.command;
 
     // Use UTC+8 (China Standard Time) for "today" boundary
@@ -177,8 +181,9 @@ Page({
   },
 
   _loadShopSettings() {
-    if (!wx.cloud) return;
-    const db = wx.cloud.database();
+    const resourceCloud = app.globalData.resourceCloud;
+    if (!resourceCloud) return;
+    const db = resourceCloud.database();
     db.collection('shop-settings').doc('shop').get().then(res => {
       if (res.data) {
         app.globalData.shopSettings = res.data;
@@ -214,8 +219,9 @@ Page({
     wx.setStorageSync('shopSettings', app.globalData.shopSettings);
     this.setData({ shopOpen: isOpen });
 
-    if (wx.cloud) {
-      wx.cloud.callFunction({
+    const resourceCloud = app.globalData.resourceCloud;
+    if (resourceCloud) {
+      resourceCloud.callFunction({
         name: 'updateShopSettings',
         data: { isOpen }
       });

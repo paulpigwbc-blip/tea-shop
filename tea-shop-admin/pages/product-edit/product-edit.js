@@ -30,8 +30,9 @@ Page({
     }
 
     // Load categories from cloud DB
-    if (wx.cloud) {
-      const db = wx.cloud.database();
+    const resourceCloud = app.globalData.resourceCloud;
+    if (resourceCloud) {
+      const db = resourceCloud.database();
       db.collection('categories').orderBy('sort', 'asc').get().then(res => {
         const cats = (res.data || []).map(c => c.name);
         if (cats.length > 0) {

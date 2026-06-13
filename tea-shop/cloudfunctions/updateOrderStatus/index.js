@@ -19,7 +19,9 @@ const VALID_TRANSITIONS = {
 
 exports.main = async (event, context) => {
   // SECURITY RULE 2: Mandatory identity verification
-  const { OPENID } = cloud.getWXContext();
+  const wxContext = cloud.getWXContext();
+  // 跨账号环境共享时，使用 FROM_OPENID 而不是 OPENID
+  const OPENID = wxContext.FROM_OPENID || wxContext.OPENID;
   if (!OPENID) {
     return { code: -1, data: null, message: 'User identity verification failed' };
   }

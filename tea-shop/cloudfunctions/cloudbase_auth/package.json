@@ -1,0 +1,9 @@
+{
+  "name": "cloudbase_auth",
+  "version": "1.0.0",
+  "description": "Auth function for environment sharing",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

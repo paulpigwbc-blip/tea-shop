@@ -20,9 +20,10 @@ Page({
     }
 
     const id = options.id;
-    if (wx.cloud && id) {
+    const resourceCloud = app.globalData.resourceCloud;
+    if (resourceCloud && id) {
       wx.showLoading({ title: '加载中...' });
-      const db = wx.cloud.database();
+      const db = resourceCloud.database();
       db.collection('orders').doc(id).get().then(res => {
         wx.hideLoading();
         if (res.data) {

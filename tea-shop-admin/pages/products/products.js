@@ -41,38 +41,36 @@ Page({
   },
 
   loadProducts() {
-    if (wx.cloud) {
-      const db = wx.cloud.database();
-      db.collection('products')
-        .orderBy('createdAt', 'desc')
-        .limit(100)
-        .get()
-        .then(res => {
-          const allProducts = res.data || [];
-          app.globalData.products = allProducts;
-
-          // Build category options from actual data
-          const catSet = new Set(allProducts.map(p => p.category).filter(Boolean));
-          const categoryOptions = ['全部', ...Array.from(catSet)];
-
-          this.setData({ allProducts, categoryOptions });
-          this.applyFilters();
-        })
-        .catch(err => {
-          console.error('Cloud load products error:', err);
-          const allProducts = app.globalData.products || [];
-          const catSet = new Set(allProducts.map(p => p.category).filter(Boolean));
-          const categoryOptions = ['全部', ...Array.from(catSet)];
-          this.setData({ allProducts, categoryOptions });
-          this.applyFilters();
-        });
-    } else {
-      const allProducts = app.globalData.products || [];
-      const catSet = new Set(allProducts.map(p => p.category).filter(Boolean));
-      const categoryOptions = ['全部', ...Array.from(catSet)];
-      this.setData({ allProducts, categoryOptions });
-      this.applyFilters();
+    const resourceCloud = app.globalData.resourceCloud;
+    if (!resourceCloud) {
+      console.warn('[Products] Resource cloud not available');
+      return;
     }
+
+    const db = resourceCloud.database();
+    db.collection('products')
+      .orderBy('createdAt', 'desc')
+      .limit(100)
+      .get()
+      .then(res => {
+        const allProducts = res.data || [];
+        app.globalData.products = allProducts;
+
+        // Build category options from actual data
+        const catSet = new Set(allProducts.map(p => p.category).filter(Boolean));
+        const categoryOptions = ['全部', ...Array.from(catSet)];
+
+        this.setData({ allProducts, categoryOptions });
+        this.applyFilters();
+      })
+      .catch(err => {
+        console.error('Cloud load products error:', err);
+        const allProducts = app.globalData.products || [];
+        const catSet = new Set(allProducts.map(p => p.category).filter(Boolean));
+        const categoryOptions = ['全部', ...Array.from(catSet)];
+        this.setData({ allProducts, categoryOptions });
+        this.applyFilters();
+      });
   },
 
   // Apply both status and category filters
