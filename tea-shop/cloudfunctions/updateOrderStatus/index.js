@@ -10,16 +10,17 @@ const _ = db.command;
 
 // Valid status transitions map
 // New lifecycle: pending → paid → shipped → completed (no "accepted" step)
-// Cancel flow: pending → cancel_pending → cancelled (seller approves) / pending (seller rejects)
+// Cancel flow: pending → cancelled (buyer cancels directly, no seller approval needed)
+// Legacy: pending → cancel_pending → cancelled (kept for backward compatibility)
 // Refund flow: paid → refund_pending → cancelled (seller approves) / paid (seller rejects)
 const VALID_TRANSITIONS = {
-  pending: ['paid', 'cancel_pending'],      // Buyer: pay or request cancel
-  cancel_pending: ['cancelled', 'pending'], // Seller: approve cancel (→cancelled) or reject (→pending)
-  paid: ['shipped', 'refund_pending'],      // Seller: ship; Buyer: request refund
-  refund_pending: ['cancelled', 'paid'],    // Seller: approve refund (→cancelled) or reject (→paid)
-  shipped: ['completed'],                   // Buyer: confirm receipt (no refund after shipped)
-  completed: [],                            // Terminal state
-  cancelled: []                             // Terminal state
+  pending: ['paid', 'cancel_pending', 'cancelled'],  // Buyer: pay, cancel directly, or legacy request cancel
+  cancel_pending: ['cancelled', 'pending'],           // Seller: approve cancel (→cancelled) or reject (→pending)
+  paid: ['shipped', 'refund_pending'],                // Seller: ship; Buyer: request refund
+  refund_pending: ['cancelled', 'paid'],              // Seller: approve refund (→cancelled) or reject (→paid)
+  shipped: ['completed'],                             // Buyer: confirm receipt (no refund after shipped)
+  completed: [],                                      // Terminal state
+  cancelled: []                                       // Terminal state
 };
 
 exports.main = async (event, context) => {
@@ -99,17 +100,22 @@ exports.main = async (event, context) => {
         return { code: -1, data: null, message: 'Permission denied: only buyer can request refund' };
       }
     } else if (status === 'cancelled') {
-      // Only seller can approve cancellation (cancel_pending → cancelled) or refund (refund_pending → cancelled)
-      if (order.status === 'cancel_pending') {
+      // Buyer can directly cancel unpaid pending orders (pending → cancelled)
+      if (order.status === 'pending') {
+        if (!isBuyer) {
+          return { code: -1, data: null, message: 'Permission denied: only buyer can cancel order' };
+        }
+      } else if (order.status === 'cancel_pending') {
+        // Seller approving cancellation (cancel_pending → cancelled)
         if (!isSeller) {
           return { code: -1, data: null, message: 'Permission denied: only seller can approve cancel' };
         }
       } else if (order.status === 'refund_pending') {
+        // Seller approving refund (refund_pending → cancelled)
         if (!isSeller) {
           return { code: -1, data: null, message: 'Permission denied: only seller can approve refund' };
         }
       }
-      // Note: pending → cancelled is no longer allowed (must go through cancel_pending)
     } else if (status === 'completed') {
       // Buyer confirms receipt of shipped order, or seller can also complete
       if (!isBuyer && !isSeller) {

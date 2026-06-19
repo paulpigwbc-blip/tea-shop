@@ -361,41 +361,79 @@ Page({
     }, 800);
   },
 
-  // Cancel order — buyer requests cancel, merchant must approve
+  // Cancel order — pending orders cancel directly; other orders need seller approval
   cancelOrder(e) {
     const id = e.currentTarget.dataset.id;
+    const order = this.data.orders.find(o => o._id === id);
+    if (!order) return;
+    const isPending = order.status === 'pending';
+
+    const modalTitle = isPending ? '取消订单' : '申请取消';
+    const modalContent = isPending
+      ? '确定要取消该订单吗？取消后不可恢复。'
+      : '确定要申请取消该订单吗？商家确认后订单将取消。';
+    const confirmText = isPending ? '确定取消' : '申请取消';
+
     wx.showModal({
-      title: '提示',
-      content: '确定要申请取消该订单吗？商家确认后订单将取消。',
-      confirmText: '申请取消',
+      title: modalTitle,
+      content: modalContent,
+      confirmText: confirmText,
       confirmColor: '#E54D42',
       success: (res) => {
         if (res.confirm) {
-          // SECURITY: Route through cloud function
+          const targetStatus = isPending ? 'cancelled' : 'cancel_pending';
           if (wx.cloud) {
             wx.showLoading({ title: '处理中...' });
             wx.cloud.callFunction({
               name: 'updateOrderStatus',
-              data: { orderId: id, status: 'cancel_pending', cancelReason: '买家申请取消' },
+              data: { orderId: id, status: targetStatus, cancelReason: isPending ? '买家取消订单' : '买家申请取消' },
               success: (res) => {
                 wx.hideLoading();
                 if (res.result && res.result.code === 0) {
-                  this._requestCancelLocal(id);
+                  if (isPending) {
+                    this._directCancelLocal(id);
+                  } else {
+                    this._requestCancelLocal(id);
+                  }
                 } else {
-                  wx.showToast({ title: (res.result && res.result.message) || '申请失败', icon: 'none' });
+                  wx.showToast({ title: (res.result && res.result.message) || '操作失败', icon: 'none' });
                 }
               },
               fail: () => {
                 wx.hideLoading();
-                this._requestCancelLocal(id);
+                if (isPending) {
+                  this._directCancelLocal(id);
+                } else {
+                  this._requestCancelLocal(id);
+                }
               }
             });
           } else {
-            this._requestCancelLocal(id);
+            if (isPending) {
+              this._directCancelLocal(id);
+            } else {
+              this._requestCancelLocal(id);
+            }
           }
         }
       }
     });
+  },
+
+  // Local direct cancel for pending orders
+  _directCancelLocal(id) {
+    const orders = this.data.orders;
+    const order = orders.find(o => o._id === id);
+    if (order) {
+      order.status = 'cancelled';
+      order.updatedAt = new Date().toISOString();
+      order.cancelledAt = new Date().toISOString();
+      order.cancelledBy = 'buyer';
+      order.cancelReason = '买家取消订单';
+      wx.setStorageSync('orders', orders);
+      this.loadOrders();
+      wx.showToast({ title: '订单已取消', icon: 'success' });
+    }
   },
 
   _requestCancelLocal(id) {

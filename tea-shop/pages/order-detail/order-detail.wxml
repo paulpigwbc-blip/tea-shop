@@ -175,7 +175,7 @@
       <text>立即付款</text>
     </view>
     <view class="action-btn cancel-action" wx:if="{{order.status === 'pending'}}" bindtap="cancelOrder">
-      <text>申请取消</text>
+      <text>取消订单</text>
     </view>
     <view class="action-btn cancel-pending-hint" wx:if="{{order.status === 'cancel_pending'}}">
       <text>取消处理中</text>
