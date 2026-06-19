@@ -2,7 +2,7 @@
 <view class="product-card" bindtap="onCardTap">
   <view class="card-img-wrap">
     <image class="card-img" wx:if="{{coverImage}}" src="{{coverImage}}" mode="aspectFill" />
-    <view class="card-placeholder" wx:else style="background: linear-gradient(135deg, {{product.id % 2 === 0 ? '#E8DCC8, #D4C4A8' : '#C8D8B8, #A8C090'}});">
+    <view class="card-placeholder" wx:else>
       <text class="placeholder-char">{{product.name[0]}}</text>
     </view>
   </view>

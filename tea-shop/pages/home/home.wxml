@@ -1,168 +1,72 @@
 <!-- pages/home/home.wxml -->
 <view class="home-page">
 
-  <!-- Hero Banner -->
+  <!-- Hero Section - 极简居中对称留白 -->
   <view class="hero-section">
-    <view class="hero-overlay">
-      <view class="hero-content">
-        <view class="hero-subtitle">SINCE 1898</view>
-        <view class="hero-title">茶语轩</view>
-        <view class="hero-desc">一杯好茶，一段故事</view>
-        <view class="hero-divider"></view>
-        <view class="hero-action" bindtap="scrollToStory">
-          <text>探索我们的故事</text>
-          <text class="arrow-down">▾</text>
-        </view>
+    <view class="hero-image">
+      <image class="hero-img" src="/images/tea-hero.jpg" mode="aspectFill"></image>
+    </view>
+    <view class="hero-content">
+      <view class="hero-tag">PREMIUM</view>
+      <view class="hero-title">红茶·艺术</view>
+      <view class="hero-subtitle">懂茶的人，都懂这一杯</view>
+      <view class="hero-divider"></view>
+      <view class="hero-action" bindtap="goToCategory">
+        <text>立即选购</text>
       </view>
     </view>
   </view>
 
-  <!-- Brand Story Section -->
-  <view class="story-section">
-    <view class="section-header">
-      <view class="section-line"></view>
-      <text class="section-label">品牌故事</text>
-      <view class="section-line"></view>
-    </view>
-    <view class="story-content">
-      <view class="story-text-block">
-        <text class="story-lead">源自高山云雾之间，传承百年匠心工艺</text>
-        <text class="story-body">茶语轩的故事始于1898年，我们的先祖在武夷山的云雾深处，开始了一段与茶相伴的旅程。百年来，我们始终坚守"以茶传心"的信念，从茶园到茶杯，每一片茶叶都承载着对品质的极致追求。</text>
-      </view>
-      <view class="story-highlight">
-        <view class="highlight-card">
-          <view class="highlight-icon icon-mountain"></view>
-          <text class="highlight-num">126</text>
-          <text class="highlight-label">年传承</text>
-        </view>
-        <view class="highlight-card">
-          <view class="highlight-icon icon-leaf"></view>
-          <text class="highlight-num">8</text>
-          <text class="highlight-label">核心茶园</text>
-        </view>
-        <view class="highlight-card">
-          <view class="highlight-icon icon-hand"></view>
-          <text class="highlight-num">100%</text>
-          <text class="highlight-label">手工采摘</text>
-        </view>
-      </view>
-    </view>
+  <!-- Brand Statement - 居中对称 -->
+  <view class="brand-statement">
+    <view class="statement-mark">"</view>
+    <text class="statement-text">不是所有红茶，都值得等待。我们用时间换品质，让每一杯茶，都成为时光的见证。</text>
   </view>
 
-  <!-- Featured Tea Section -->
+  <!-- Featured Product - 极简卡片 -->
   <view class="featured-section">
-    <view class="section-header">
-      <view class="section-line"></view>
-      <text class="section-label">匠心之作</text>
-      <view class="section-line"></view>
+    <view class="featured-header">
+      <text class="featured-label">匠心之作</text>
+      <view class="featured-line"></view>
     </view>
-    <view class="featured-item">
-      <view class="featured-img featured-img-1"></view>
+    <view class="featured-card" bindtap="goToDetail" data-id="{{featuredProduct.id}}">
+      <view class="featured-image-wrap">
+        <image wx:if="{{featuredProduct.image}}" class="featured-image" src="{{featuredProduct.image}}" mode="aspectFill"></image>
+        <view wx:else class="featured-placeholder">
+          <text class="placeholder-char">{{featuredProduct.name[0]}}</text>
+        </view>
+      </view>
       <view class="featured-info">
-        <text class="featured-name">明前龙井</text>
-        <text class="featured-subtitle">西湖 · 明前特级</text>
-        <text class="featured-desc">清明前采摘的嫩芽，经老师傅手工炒制，汤色嫩绿明亮，滋味鲜爽甘醇。每一口，都是春天的味道。</text>
-        <view class="featured-price-row">
-          <text class="featured-price">¥268</text>
-          <text class="featured-unit">/50g</text>
-        </view>
-      </view>
-    </view>
-    <view class="featured-item featured-reverse">
-      <view class="featured-img featured-img-2"></view>
-      <view class="featured-info">
-        <text class="featured-name">武夷大红袍</text>
-        <text class="featured-subtitle">武夷山 · 岩茶极品</text>
-        <text class="featured-desc">生长于武夷山岩壁之间，独特的"岩骨花香"令人回味无穷。九次焙火，方得一味醇厚。</text>
-        <view class="featured-price-row">
-          <text class="featured-price">¥388</text>
-          <text class="featured-unit">/50g</text>
-        </view>
-      </view>
-    </view>
-  </view>
-
-  <!-- Why Choose Us -->
-  <view class="why-section">
-    <view class="section-header">
-      <view class="section-line"></view>
-      <text class="section-label">为什么选择我们</text>
-      <view class="section-line"></view>
-    </view>
-    <view class="why-grid">
-      <view class="why-item">
-        <view class="why-icon icon-organic">
-          <text class="icon-text">有机</text>
-        </view>
-        <text class="why-title">有机种植</text>
-        <text class="why-desc">不使用化学农药，自然生态种植</text>
-      </view>
-      <view class="why-item">
-        <view class="why-icon icon-handpick">
-          <text class="icon-text">手采</text>
-        </view>
-        <text class="why-title">手工采摘</text>
-        <text class="why-desc">经验丰富的采茶人，精选每一片嫩叶</text>
-      </view>
-      <view class="why-item">
-        <view class="why-icon icon-craft">
-          <text class="icon-text">匠制</text>
-        </view>
-        <text class="why-title">传统工艺</text>
-        <text class="why-desc">百年传承的制茶工艺，匠心烘焙</text>
-      </view>
-      <view class="why-item">
-        <view class="why-icon icon-fresh">
-          <text class="icon-text">鲜达</text>
-        </view>
-        <text class="why-title">产地直达</text>
-        <text class="why-desc">从茶园到茶杯，冷链配送保鲜</text>
-      </view>
-    </view>
-  </view>
-
-  <!-- Best Sellers -->
-  <view class="bestseller-section">
-    <view class="section-header">
-      <view class="section-line"></view>
-      <text class="section-label">人气热销</text>
-      <view class="section-line"></view>
-    </view>
-    <scroll-view class="bestseller-scroll" scroll-x enhanced show-scrollbar="{{false}}">
-      <view class="bestseller-list">
-        <view class="bestseller-item" wx:for="{{bestSellers}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
-          <view class="bestseller-img-wrap">
-            <image wx:if="{{item.image}}" class="bestseller-img-real" src="{{item.image}}" mode="aspectFill" />
-            <view wx:else class="bestseller-placeholder">
-              <text class="placeholder-text">{{item.name[0]}}</text>
-            </view>
-            <view class="bestseller-badge">热销</view>
-          </view>
-          <view class="bestseller-info">
-            <text class="bestseller-name">{{item.name}}</text>
-            <text class="bestseller-desc-text">{{item.desc}}</text>
-            <view class="bestseller-bottom">
-              <text class="bestseller-price">¥{{item.price}}</text>
-              <view class="bestseller-add" bindtap="addToCart" data-id="{{item.id}}">
-                <text>+</text>
-              </view>
-            </view>
+        <view class="featured-tag">本期精选</view>
+        <view class="featured-name">{{featuredProduct.name}}</view>
+        <view class="featured-category">{{featuredProduct.category}}</view>
+        <view class="featured-desc">{{featuredProduct.desc}}</view>
+        <view class="featured-footer">
+          <text class="featured-price">¥{{featuredProduct.price}}</text>
+          <view class="featured-action">
+            <text class="action-text">查看详情</text>
+            <text class="arrow">→</text>
           </view>
         </view>
       </view>
-    </scroll-view>
-    <view class="view-all-btn" bindtap="goToCategory">
-      <text>查看全部产品</text>
     </view>
   </view>
 
-  <!-- Philosophy Footer -->
-  <view class="philosophy-section">
-    <view class="philosophy-bg"></view>
-    <view class="philosophy-content">
-      <view class="philosophy-mark">"</view>
-      <text class="philosophy-text">茶之为饮，发乎神农氏，闻于鲁周公。一杯清茶，品人生百味，悟天地至理。</text>
-      <view class="philosophy-author">—— 茶语轩</view>
+  <!-- Bottom Info - 极简 -->
+  <view class="bottom-info">
+    <view class="info-item">
+      <text class="info-label">1898</text>
+      <text class="info-desc">传承至今</text>
+    </view>
+    <view class="info-divider"></view>
+    <view class="info-item">
+      <text class="info-label">100%</text>
+      <text class="info-desc">有机认证</text>
+    </view>
+    <view class="info-divider"></view>
+    <view class="info-item">
+      <text class="info-label">全球</text>
+      <text class="info-desc">冷链配送</text>
     </view>
   </view>
 

@@ -28,15 +28,15 @@
     <!-- Right Product Grid -->
     <scroll-view class="product-area" scroll-y enhanced show-scrollbar="{{false}}">
       <view class="product-grid">
-        <view class="product-card" wx:for="{{filteredProducts}}" wx:key="id" bindtap="goToDetail" data-id="{{item.id}}">
-          <view class="product-img-wrap">
+        <view class="product-card" wx:for="{{filteredProducts}}" wx:key="id">
+          <view class="product-img-wrap" bindtap="goToDetail" data-id="{{item.id}}">
             <image wx:if="{{item.image}}" class="product-img-real" src="{{item.image}}" mode="aspectFill" />
-            <view wx:else class="product-placeholder" style="background: linear-gradient(135deg, {{item.id % 2 === 0 ? '#E8DCC8, #D4C4A8' : '#C8D8B8, #A8C090'}});">
+            <view wx:else class="product-placeholder">
               <text class="product-placeholder-text">{{item.name[0]}}</text>
             </view>
           </view>
           <view class="product-info">
-            <text class="product-name">{{item.name}}</text>
+            <text class="product-name" bindtap="goToDetail" data-id="{{item.id}}">{{item.name}}</text>
             <text class="product-desc">{{item.desc}}</text>
             <view class="product-bottom">
               <view class="product-price-row">
@@ -66,5 +66,12 @@
       <!-- Bottom spacing -->
       <view class="bottom-spacer"></view>
     </scroll-view>
+  </view>
+
+  <!-- Fly-to-cart animation dots -->
+  <view class="fly-dot"
+        wx:for="{{flyDots}}" wx:key="key"
+        style="left:{{item.x}}px;top:{{item.y}}px;"
+        animation="{{item.animation}}">
   </view>
 </view>

@@ -8,7 +8,9 @@ Page({
     products: [],
     filteredProducts: [],
     searchText: '',
-    quantityMap: {}
+    quantityMap: {},
+    flyDots: [],
+    flyDotKey: 0
   },
 
   onLoad() {
@@ -20,6 +22,9 @@ Page({
   },
 
   onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 1 });
+    }
     // Refresh when cloud data may have loaded
     this.loadFromGlobal();
     // Refresh quantity map from cart
@@ -100,11 +105,74 @@ Page({
     const product = this.data.products.find(p => p.id === id || p._id === id);
     if (!product) return;
 
-    app.addToCart(product, 1);
-    
+    app.addToCart(product, 1, true);  // silent: no toast
+
     const quantityMap = this.data.quantityMap;
     quantityMap[id] = (quantityMap[id] || 0) + 1;
     this.setData({ quantityMap: quantityMap });
+
+    // Trigger fly-to-cart animation
+    this.flyToCart(e);
+  },
+
+  // Fly-to-cart animation
+  flyToCart(e) {
+    // Get tap position (touch coordinates relative to page)
+    let touch = e.touches && e.touches[0];
+    if (!touch && e.changedTouches) touch = e.changedTouches[0];
+    if (!touch) return;
+
+    const startX = touch.clientX || touch.x || 0;
+    const startY = touch.clientY || touch.y || 0;
+
+    // Target: cart tab icon (bottom area, approximate center-right of cart tab)
+    const sysInfo = wx.getWindowInfo ? wx.getWindowInfo() : wx.getSystemInfoSync();
+    const screenWidth = sysInfo.windowWidth;
+    const screenHeight = sysInfo.windowHeight;
+    // Cart tab is the 3rd of 5 tabs → roughly center of screen horizontally
+    const endX = screenWidth * 0.5;
+    const endY = screenHeight - 20;  // bottom of page (tab bar)
+
+    // Midpoint for arc (parabola peak - higher than straight line)
+    const midX = (startX + endX) / 2;
+    const midY = Math.min(startY, endY) - 80;
+
+    const key = 'dot_' + (++this.data.flyDotKey);
+
+    // Create the animation
+    const anim = wx.createAnimation({
+      duration: 300,
+      timingFunction: 'linear',
+      delay: 0
+    });
+
+    // Step 1: move to midpoint (arc up)
+    anim.translate(midX - startX, midY - startY).opacity(0.9).step({
+      duration: 300,
+      timingFunction: 'ease-out'
+    });
+
+    // Step 2: move from midpoint to end point, shrink + fade
+    anim.translate(endX - midX, endY - midY).opacity(0).scale(0.3).step({
+      duration: 300,
+      timingFunction: 'ease-in'
+    });
+
+    // Add the dot
+    const flyDots = this.data.flyDots.concat([{
+      key: key,
+      x: startX,
+      y: startY,
+      animation: anim.export()
+    }]);
+    this.setData({ flyDots: flyDots });
+
+    // Remove the dot after animation completes
+    setTimeout(() => {
+      this.setData({
+        flyDots: this.data.flyDots.filter(d => d.key !== key)
+      });
+    }, 700);
   },
 
   // Decrease quantity

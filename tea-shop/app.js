@@ -20,15 +20,17 @@ App({
     const orders = wx.getStorageSync('orders') || [];
     this.globalData.orders = orders;
 
-    // Mock user info
-    const userInfo = wx.getStorageSync('userInfo') || {
-      avatarUrl: '',
-      nickName: '茶友',
+    // Load user info from local storage (WeChat manages privacy consent)
+    const userInfo = wx.getStorageSync('userInfo');
+    if (userInfo) {
+      this.globalData.userInfo = userInfo;
+    }
+    // App-level stats (not personal data)
+    this.globalData.userStats = {
       balance: 128.50,
       coupons: 5,
       points: 2680
     };
-    this.globalData.userInfo = userInfo;
   },
 
   // Load products from cloud database (replaces mock data)
@@ -44,7 +46,9 @@ App({
             name: p.name, category: p.category, status: p.status, _id: p._id
           }))));
 
-          const products = res.data.map(p => ({
+          const products = res.data
+            .filter(p => p.category === '红茶')
+            .map(p => ({
             id: p._id,
             _id: p._id,
             name: p.name,
@@ -162,46 +166,24 @@ App({
     cart: [],
     orders: [],
     userInfo: null,
+    userStats: null,
     cloudEnabled: false,
     checkoutItems: null,
     cloudDataReady: false,
     dataReadyCallbacks: [],
     // All products mock data
     products: [
-      // 绿茶
-      { id: 1, name: '西湖龙井', desc: '明前特级 鲜爽回甘', price: 268, category: '绿茶', image: '/images/products/longjing.jpg', sales: 1580 },
-      { id: 2, name: '碧螺春', desc: '洞庭东山 嫩香清雅', price: 198, category: '绿茶', image: '/images/products/biluochun.jpg', sales: 920 },
-      { id: 3, name: '黄山毛峰', desc: '高山云雾 清香持久', price: 158, category: '绿茶', image: '/images/products/maofeng.jpg', sales: 760 },
-      { id: 4, name: '信阳毛尖', desc: '核心产区 鲜浓甘爽', price: 138, category: '绿茶', image: '/images/products/maojian.jpg', sales: 650 },
       // 红茶
       { id: 5, name: '正山小种', desc: '桐木关原产 松烟香', price: 298, category: '红茶', image: '/images/products/xiaozhong.jpg', sales: 1320 },
       { id: 6, name: '金骏眉', desc: '芽头金黄 蜜香馥郁', price: 599, category: '红茶', image: '/images/products/jinjunmei.jpg', sales: 890 },
       { id: 7, name: '祁门红茶', desc: '祁红特绝 似花似蜜', price: 258, category: '红茶', image: '/images/products/qimen.jpg', sales: 540 },
-      { id: 8, name: '滇红金芽', desc: '云南大叶 金毫显露', price: 188, category: '红茶', image: '/images/products/dianhong.jpg', sales: 430 },
-      // 乌龙茶
-      { id: 9, name: '铁观音', desc: '安溪原产 兰香雅韵', price: 228, category: '乌龙茶', image: '/images/products/tieguanyin.jpg', sales: 2100 },
-      { id: 10, name: '大红袍', desc: '武夷岩韵 岩骨花香', price: 388, category: '乌龙茶', image: '/images/products/dahongpao.jpg', sales: 1560 },
-      { id: 11, name: '凤凰单丛', desc: '潮州凤凰 丛韵独特', price: 328, category: '乌龙茶', image: '/images/products/dancong.jpg', sales: 680 },
-      { id: 12, name: '冻顶乌龙', desc: '台湾高山 滋味醇厚', price: 278, category: '乌龙茶', image: '/images/products/dongding.jpg', sales: 520 },
-      // 白茶
-      { id: 13, name: '白毫银针', desc: '满披白毫 芽头肥壮', price: 488, category: '白茶', image: '/images/products/yinzhen.jpg', sales: 760 },
-      { id: 14, name: '白牡丹', desc: '一芽一二叶 清甜醇爽', price: 268, category: '白茶', image: '/images/products/baimudan.jpg', sales: 620 },
-      { id: 15, name: '寿眉', desc: '老白茶 陈香药韵', price: 168, category: '白茶', image: '/images/products/shoumei.jpg', sales: 480 },
-      // 花茶
-      { id: 16, name: '茉莉龙珠', desc: '茉莉窨制 花香怡人', price: 128, category: '花茶', image: '/images/products/longzhu.jpg', sales: 1800 },
-      { id: 17, name: '玫瑰花茶', desc: '平阴玫瑰 芬芳馥郁', price: 88, category: '花茶', image: '/images/products/meigui.jpg', sales: 1350 },
-      { id: 18, name: '桂花乌龙', desc: '桂花与乌龙的邂逅', price: 108, category: '花茶', image: '/images/products/guihua.jpg', sales: 920 },
-      // 礼盒装
-      { id: 19, name: '经典名茶礼盒', desc: '六大名茶 精美礼盒', price: 599, category: '礼盒装', image: '/images/products/lihe-classic.jpg', sales: 420 },
-      { id: 20, name: '龙井尊享礼盒', desc: '特级龙井 商务之选', price: 388, category: '礼盒装', image: '/images/products/lihe-longjing.jpg', sales: 350 },
-      { id: 21, name: '大红袍礼盒', desc: '岩茶至尊 送礼佳品', price: 458, category: '礼盒装', image: '/images/products/lihe-dahongpao.jpg', sales: 290 },
-      { id: 22, name: '白茶年鉴礼盒', desc: '三年白茶 岁月陈香', price: 528, category: '礼盒装', image: '/images/products/lihe-baicha.jpg', sales: 210 }
+      { id: 8, name: '滇红金芽', desc: '云南大叶 金毫显露', price: 188, category: '红茶', image: '/images/products/dianhong.jpg', sales: 430 }
     ],
-    categories: ['绿茶', '红茶', '乌龙茶', '白茶', '花茶', '礼盒装']
+    categories: ['红茶']
   },
 
   // Cart operations
-  addToCart(product, quantity) {
+  addToCart(product, quantity, silent) {
     const cart = this.globalData.cart;
     const existing = cart.find(item => item.id === product.id);
     if (existing) {
@@ -210,7 +192,9 @@ App({
       cart.push({ ...product, quantity: quantity, checked: true });
     }
     this.saveCart();
-    wx.showToast({ title: '已加入购物车', icon: 'success' });
+    if (!silent) {
+      wx.showToast({ title: '已加入购物车', icon: 'success' });
+    }
   },
 
   removeFromCart(productId) {

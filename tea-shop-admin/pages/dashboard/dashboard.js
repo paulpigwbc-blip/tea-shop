@@ -11,7 +11,8 @@ Page({
     completedCount: 0,
     recentOrders: [],
     shopOpen: true,
-    loading: true
+    loading: true,
+    userOpenId: ''
   },
 
   onLoad() {
@@ -39,7 +40,10 @@ Page({
       this.setData({ authState: 'allowed' });
       this.loadDashboard();
     } else {
-      this.setData({ authState: 'denied' });
+      this.setData({ 
+        authState: 'denied',
+        userOpenId: app.globalData.userOpenId || ''
+      });
     }
   },
 
@@ -257,5 +261,23 @@ Page({
     wx.switchTab({
       url: '/pages/orders/orders'
     });
+  },
+
+  // Copy OPENID to clipboard
+  copyOpenId() {
+    wx.setClipboardData({
+      data: this.data.userOpenId,
+      success: () => {
+        wx.showToast({ title: '已复制OpenID', icon: 'success' });
+      }
+    });
+  },
+
+  // Retry permission check
+  retryAuth() {
+    this.setData({ authState: 'loading' });
+    app.globalData.authChecked = false;
+    app.globalData.isSeller = false;
+    app._checkSellerPermission();
   }
 });

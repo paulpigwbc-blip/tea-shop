@@ -1,0 +1,9 @@
+{
+  "name": "sendUrgencyMessage",
+  "version": "1.0.0",
+  "description": "Send urgency reminder message to seller",
+  "main": "index.js",
+  "dependencies": {
+    "wx-server-sdk": "~2.6.3"
+  }
+}

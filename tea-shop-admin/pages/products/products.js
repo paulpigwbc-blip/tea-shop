@@ -129,38 +129,40 @@ Page({
     const newStatus = product.status === 'active' ? 'hidden' : 'active';
     const statusLabel = newStatus === 'active' ? '上架' : '下架';
 
+    const resourceCloud = app.globalData.resourceCloud;
+    if (!resourceCloud) {
+      this._toggleFallback(product, newStatus, statusLabel);
+      return;
+    }
+
     wx.showLoading({ title: '处理中...' });
 
-    if (wx.cloud) {
-      // Use cloud function for DB write (bypasses security rules)
-      wx.cloud.callFunction({
-        name: 'updateProduct',
-        data: {
-          productId: id,
-          productData: { ...product, status: newStatus },
-          isNew: false
-        },
-        success: (res) => {
-          wx.hideLoading();
-          if (res.result && res.result.code === 0) {
-            product.status = newStatus;
-            this.setData({ allProducts });
-            this.applyFilters();
-            wx.showToast({ title: `已${statusLabel}`, icon: 'success' });
-          } else {
-            const msg = (res.result && res.result.message) || '操作失败';
-            wx.showToast({ title: msg, icon: 'none' });
-          }
-        },
-        fail: (err) => {
-          wx.hideLoading();
-          console.error('Toggle status cloud function failed:', err);
-          wx.showToast({ title: '云函数调用失败', icon: 'none' });
+    // MUST use resourceCloud (not wx.cloud) for cross-account environment sharing
+    resourceCloud.callFunction({
+      name: 'updateProduct',
+      data: {
+        productId: id,
+        productData: { ...product, status: newStatus },
+        isNew: false
+      },
+      success: (res) => {
+        wx.hideLoading();
+        if (res.result && res.result.code === 0) {
+          product.status = newStatus;
+          this.setData({ allProducts });
+          this.applyFilters();
+          wx.showToast({ title: `已${statusLabel}`, icon: 'success' });
+        } else {
+          const msg = (res.result && res.result.message) || '操作失败';
+          wx.showToast({ title: msg, icon: 'none' });
         }
-      });
-    } else {
-      this._toggleFallback(product, newStatus, statusLabel);
-    }
+      },
+      fail: (err) => {
+        wx.hideLoading();
+        console.error('Toggle status cloud function failed:', err);
+        wx.showToast({ title: '云函数调用失败', icon: 'none' });
+      }
+    });
   },
 
   _toggleFallback(product, newStatus, statusLabel) {

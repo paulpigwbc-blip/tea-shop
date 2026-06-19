@@ -137,6 +137,21 @@ exports.main = async (event, context) => {
       }
     }
 
+    // Auto-send urgency reminder to seller on order creation
+    // This helps seller ship faster, improving buyer experience
+    try {
+      await cloud.callFunction({
+        name: 'sendUrgencyMessage',
+        data: {
+          orderId: result._id,
+          autoTrigger: true  // Indicates this is automatic, not buyer-triggered
+        }
+      });
+    } catch (e) {
+      // Don't block order creation if message fails
+      console.error('Failed to send auto urgency message:', e);
+    }
+
     return {
       code: 0,
       data: {

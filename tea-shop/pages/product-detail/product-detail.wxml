@@ -9,7 +9,7 @@
       </swiper-item>
       <!-- Fallback if no images -->
       <swiper-item wx:if="{{!product.images || product.images.length === 0}}">
-        <view class="detail-img-placeholder" style="background: linear-gradient(135deg, {{product.id % 2 === 0 ? '#E8DCC8, #D4C4A8' : '#C8D8B8, #A8C090'}});">
+        <view class="detail-img-placeholder">
           <text class="detail-placeholder-text">{{product.name[0]}}</text>
         </view>
       </swiper-item>

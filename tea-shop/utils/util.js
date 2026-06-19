@@ -48,7 +48,9 @@ function formatPrice(price) {
  */
 const ORDER_STATUS = {
   pending: '待付款',
+  cancel_pending: '取消申请中',
   paid: '待发货',
+  refund_pending: '退款申请中',
   shipped: '已发货',
   completed: '已完成',
   cancelled: '已取消'
@@ -63,7 +65,9 @@ function getStatusText(status) {
  */
 const ORDER_STATUS_COLOR = {
   pending: '#E54D42',
+  cancel_pending: '#FF9800',
   paid: '#FF9800',
+  refund_pending: '#FF9800',
   shipped: '#5B7744',
   completed: '#999999',
   cancelled: '#CCCCCC'

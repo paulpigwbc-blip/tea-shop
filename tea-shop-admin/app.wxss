@@ -125,6 +125,57 @@ page {
   margin-top: 20rpx;
 }
 
+/* OPENID display on denied page */
+.openid-section {
+  margin-top: 50rpx;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.openid-label {
+  font-size: 26rpx;
+  color: #666666;
+  margin-bottom: 16rpx;
+}
+.openid-box {
+  width: 100%;
+  background: #F5F5F5;
+  border: 1rpx solid #DDDDDD;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.openid-value {
+  font-size: 24rpx;
+  color: #333333;
+  word-break: break-all;
+  text-align: center;
+  font-family: monospace;
+}
+.openid-copy {
+  font-size: 24rpx;
+  color: #8B6914;
+  margin-top: 12rpx;
+}
+.openid-hint {
+  font-size: 24rpx;
+  color: #999999;
+  text-align: center;
+  line-height: 1.8;
+  margin-top: 20rpx;
+}
+.retry-btn {
+  margin-top: 40rpx;
+  padding: 20rpx 60rpx;
+  background: #8B6914;
+  color: #ffffff;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+}
+
 ::-webkit-scrollbar {
   display: none;
   width: 0;

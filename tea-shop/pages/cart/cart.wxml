@@ -3,6 +3,19 @@
 
   <!-- Cart with items -->
   <view class="cart-content" wx:if="{{cartItems.length > 0}}">
+
+    <!-- Top Checked Summary -->
+    <view class="cart-summary-bar">
+      <view class="summary-check-icon">
+        <text>✓</text>
+      </view>
+      <text class="summary-text">已选购商品</text>
+      <text class="summary-count">（{{totalCount}}件）</text>
+      <view class="manage-btn" bindtap="toggleManageMode">
+        <text>{{isManageMode ? '完成' : '管理'}}</text>
+      </view>
+    </view>
+
     <!-- Cart Item List -->
     <scroll-view class="cart-list" scroll-y enhanced show-scrollbar="{{false}}">
       <view class="cart-item" wx:for="{{cartItems}}" wx:key="id">
@@ -16,7 +29,7 @@
         <!-- Product Image -->
         <view class="cart-item-img" bindtap="goToDetail" data-id="{{item.id}}">
           <image wx:if="{{item.image}}" class="cart-img-real" src="{{item.image}}" mode="aspectFill" />
-          <view wx:else class="cart-img-placeholder" style="background: linear-gradient(135deg, {{item.id % 2 === 0 ? '#E8DCC8, #D4C4A8' : '#C8D8B8, #A8C090'}});">
+          <view wx:else class="cart-img-placeholder">
             <text class="cart-placeholder-text">{{item.name[0]}}</text>
           </view>
         </view>
@@ -28,11 +41,11 @@
           <view class="cart-item-bottom">
             <text class="cart-item-price">¥{{item.price}}</text>
             <view class="cart-qty-control">
-              <view class="cart-qty-btn" bindtap="decreaseQty" data-id="{{item.id}}">
+              <view class="cart-qty-btn" catchtap="decreaseQty" data-id="{{item.id}}">
                 <text>-</text>
               </view>
               <text class="cart-qty-num">{{item.quantity}}</text>
-              <view class="cart-qty-btn" bindtap="increaseQty" data-id="{{item.id}}">
+              <view class="cart-qty-btn" catchtap="increaseQty" data-id="{{item.id}}">
                 <text>+</text>
               </view>
             </view>
@@ -46,20 +59,31 @@
       </view>
     </scroll-view>
 
-    <!-- Bottom Bar -->
-    <view class="cart-bottom-bar safe-bottom">
-      <view class="select-all" bindtap="toggleSelectAll">
-        <view class="checkbox-icon {{isAllChecked ? 'checked' : ''}}">
-          <text wx:if="{{isAllChecked}}">✓</text>
+    <!-- Bottom Bar - Checkout / Delete -->
+    <view class="checkout-bar safe-bottom">
+      <view class="checkout-left">
+        <view class="checkout-select-all" bindtap="toggleSelectAll">
+          <view class="checkbox-icon {{isAllChecked ? 'checked' : ''}}">
+            <text wx:if="{{isAllChecked}}">✓</text>
+          </view>
         </view>
-        <text class="select-all-text">全选</text>
+        <view class="checkout-total">
+          <block wx:if="{{!isManageMode}}">
+            <text class="total-amount">¥{{totalPrice}}</text>
+            <text class="total-count" wx:if="{{totalCount > 0}}">（共{{totalCount}}件）</text>
+          </block>
+          <block wx:else>
+            <text class="manage-selected-text">已选{{selectedCount}}件</text>
+          </block>
+        </view>
       </view>
-      <view class="cart-total">
-        <text class="total-label">合计：</text>
-        <text class="total-price">¥{{totalPrice}}</text>
+      <!-- Checkout button (normal mode) -->
+      <view class="checkout-btn {{totalCount === 0 ? 'disabled' : ''}}" bindtap="checkout" wx:if="{{!isManageMode}}">
+        <text>结算</text>
       </view>
-      <view class="checkout-btn {{totalCount === 0 ? 'disabled' : ''}}" bindtap="checkout">
-        <text>结算{{totalCount > 0 ? '(' + totalCount + ')' : ''}}</text>
+      <!-- Delete button (manage mode) -->
+      <view class="delete-btn {{selectedCount === 0 ? 'disabled' : ''}}" bindtap="batchDelete" wx:else>
+        <text>删除</text>
       </view>
     </view>
   </view>

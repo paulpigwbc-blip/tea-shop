@@ -41,8 +41,75 @@
   </view>
 
   <view class="action-bar" wx:if="{{order.status !== 'completed' && order.status !== 'cancelled'}}">
-    <view class="action-btn btn-ship" wx:if="{{order.status === 'paid'}}" bindtap="updateStatus" data-status="shipped">发货</view>
-    <view class="action-btn btn-reject" wx:if="{{order.status === 'paid'}}" bindtap="updateStatus" data-status="cancelled">拒绝</view>
+    <!-- Paid actions -->
+    <view class="action-btn btn-ship" wx:if="{{order.status === 'paid'}}" bindtap="showShipFormPopup">发货</view>
+    <view class="action-btn btn-reject" wx:if="{{order.status === 'paid'}}" bindtap="confirmCancel">拒绝</view>
+    <!-- Cancel pending actions -->
+    <view class="action-btn btn-approve" wx:if="{{order.status === 'cancel_pending'}}" bindtap="approveCancel">同意取消</view>
+    <view class="action-btn btn-reject-refund" wx:if="{{order.status === 'cancel_pending'}}" bindtap="rejectCancel">拒绝取消</view>
+    <!-- Refund pending actions -->
+    <view class="action-btn btn-approve" wx:if="{{order.status === 'refund_pending'}}" bindtap="approveRefund">同意退款</view>
+    <view class="action-btn btn-reject-refund" wx:if="{{order.status === 'refund_pending'}}" bindtap="rejectRefund">拒绝退款</view>
+    <!-- Shipped actions -->
     <view class="action-btn btn-complete" wx:if="{{order.status === 'shipped'}}" bindtap="updateStatus" data-status="completed">已送达</view>
+  </view>
+
+  <!-- Express Info (when shipped) -->
+  <view class="express-card" wx:if="{{order.express}}">
+    <view class="card-title">📦 快递信息</view>
+    <view class="info-row">
+      <text class="info-label">快递公司</text>
+      <text class="info-value">{{order.express.company}}</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">快递单号</text>
+      <text class="info-value mono">{{order.express.trackingNo}}</text>
+    </view>
+  </view>
+
+  <!-- Lifecycle Timeline -->
+  <view class="timeline-card" wx:if="{{timeline.length > 0}}">
+    <view class="card-title">⏱ 订单轨迹</view>
+    <view class="timeline-list">
+      <view class="timeline-item" wx:for="{{timeline}}" wx:key="time">
+        <view class="timeline-dot">{{item.icon}}</view>
+        <view class="timeline-content">
+          <text class="timeline-label">{{item.label}}</text>
+          <text class="timeline-time">{{item.time}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- Ship Form Popup -->
+  <view class="ship-form-mask" wx:if="{{showShipForm}}" bindtap="hideShipForm">
+    <view class="ship-form-popup" catchtap>
+      <view class="ship-form-header">
+        <text class="ship-form-title">填写快递信息</text>
+        <view class="ship-form-close" bindtap="hideShipForm">
+          <text>×</text>
+        </view>
+      </view>
+      <view class="ship-form-body">
+        <view class="form-item">
+          <text class="form-label">快递公司</text>
+          <picker mode="selector" range="{{expressCompanies}}" value="{{expressIndex}}" bindchange="onExpressChange">
+            <view class="form-picker">
+              <text>{{expressCompany}}</text>
+              <text class="picker-arrow">›</text>
+            </view>
+          </picker>
+        </view>
+        <view class="form-item">
+          <text class="form-label">快递单号</text>
+          <input class="form-input" placeholder="请输入快递单号" value="{{trackingNo}}" bindinput="onTrackingInput" />
+        </view>
+      </view>
+      <view class="ship-form-footer">
+        <view class="ship-btn confirm-ship-btn" bindtap="confirmShip">
+          <text>确认发货</text>
+        </view>
+      </view>
+    </view>
   </view>
 </view>

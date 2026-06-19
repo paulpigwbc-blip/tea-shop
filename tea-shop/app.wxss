@@ -1,82 +1,170 @@
-/* app.wxss - Global Styles */
+/* app.wxss - 喜茶清爽极简・奶油清新风 */
+
 page {
-  background-color: #ffffff;
+  background-color: #FFFFFF;
   font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Helvetica, 'PingFang SC', 'Microsoft YaHei', Arial, sans-serif;
   color: #333333;
-  font-size: 30rpx;
+  font-size: 28rpx;
   line-height: 1.6;
   box-sizing: border-box;
+  font-weight: 400;
 }
 
 view, text, image, scroll-view {
   box-sizing: border-box;
 }
 
-/* Color Variables via CSS Custom Properties */
+/* 色彩变量 - 清爽极简 */
 page {
-  --color-primary: #8B6914;
-  --color-secondary: #5B7744;
-  --color-bg: #FFFFFF;
-  --color-bg-gray: #F5F5F5;
+  /* 主色 - 清新抹茶 */
+  --color-primary: #7BAF8A;
+
+  /* 文字 */
   --color-text: #333333;
-  --color-text-secondary: #999999;
-  --color-price: #E54D42;
+  --color-text-secondary: #888888;
+  --color-text-light: #C0C0C0;
+
+  /* 价格 */
+  --color-price: #444444;
+
+  /* 背景 */
+  --color-bg: #FFFFFF;
+  --color-bg-subtle: #F8F8F8;
+  --color-bg-soft: #F2F2F2;
+
+  /* 分隔 - 极细 */
   --color-border: #EEEEEE;
-  --color-white: #FFFFFF;
-  --color-gold: #C4A862;
-  --shadow-card: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
-  --radius-card: 16rpx;
-  --radius-btn: 8rpx;
+  --color-border-light: #E0E0E0;
+
+  /* 圆角 */
+  --radius-card: 8rpx;
+  --radius-btn: 4rpx;
+
+  /* 间距 - 大留白 */
+  --spacing-section: 100rpx;
+  --spacing-element: 50rpx;
+  --spacing-large: 140rpx;
 }
 
-/* Common utility classes */
 .container {
-  padding: 20rpx;
+  padding: 40rpx;
 }
 
 .section-title {
-  font-size: 36rpx;
-  font-weight: bold;
-  color: #333333;
-  margin-bottom: 20rpx;
+  font-size: 28rpx;
+  font-weight: 300;
+  color: #888888;
+  letter-spacing: 6rpx;
+  margin-bottom: var(--spacing-element);
+  text-align: center;
 }
 
 .price {
-  color: #E54D42;
+  color: #444444;
   font-weight: bold;
 }
 
 .price-symbol {
-  font-size: 26rpx;
+  font-size: 22rpx;
 }
 
 .price-value {
-  font-size: 34rpx;
+  font-size: 30rpx;
 }
 
+/* 文字导航 - 纤细轻量 */
 .btn-primary {
-  background-color: #8B6914;
-  color: #ffffff;
+  background-color: transparent;
+  color: #7BAF8A;
   border: none;
-  border-radius: 12rpx;
-  padding: 22rpx 48rpx;
-  font-size: 32rpx;
+  padding: 0;
+  font-size: 24rpx;
+  letter-spacing: 2rpx;
   text-align: center;
+  font-weight: 400;
+  transition: color 0.3s ease;
 }
 
 .btn-primary::after {
   border: none;
 }
 
-/* Common card style */
+.btn-primary:active {
+  color: #5E8A6E;
+}
+
+/* 次要文字 */
+.btn-secondary {
+  background-color: transparent;
+  color: #C0C0C0;
+  border: none;
+  padding: 0;
+  font-size: 24rpx;
+  letter-spacing: 2rpx;
+  text-align: center;
+  font-weight: 300;
+}
+
+.btn-secondary::after {
+  border: none;
+}
+
+/* 卡片 - 纯白无阴影 */
 .card {
-  background: #ffffff;
-  border-radius: 16rpx;
-  box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.08);
+  background: #FFFFFF;
+  border-radius: var(--radius-card);
   overflow: hidden;
 }
 
-/* Safe area for bottom navigation */
+/* Page Title */
+.page-title {
+  font-size: 32rpx;
+  font-weight: 300;
+  color: #888888;
+  letter-spacing: 6rpx;
+  margin-bottom: 20rpx;
+  text-align: center;
+}
+
+/* Divider - 极细 */
+.divider {
+  height: 1rpx;
+  background: #EEEEEE;
+  margin: var(--spacing-element) 0;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+  color: #C0C0C0;
+}
+
+.empty-state text {
+  font-size: 26rpx;
+  margin-top: 20rpx;
+  font-weight: 300;
+}
+
+/* Loading */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+  color: #C0C0C0;
+}
+
+.loading text {
+  font-size: 26rpx;
+  margin-left: 12rpx;
+  font-weight: 300;
+}
+
+/* Safe area */
 .safe-bottom {
   padding-bottom: env(safe-area-inset-bottom);
 }

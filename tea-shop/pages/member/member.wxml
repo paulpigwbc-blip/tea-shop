@@ -1,49 +1,71 @@
 <!-- pages/member/member.wxml -->
 <view class="member-page">
 
-  <!-- Profile Header -->
-  <view class="profile-header">
-    <view class="profile-bg"></view>
-    <view class="profile-content">
-      <!-- Login State -->
-      <block wx:if="{{isLogin}}">
-        <view class="avatar-wrap">
-          <view class="avatar-placeholder">
-            <text class="avatar-text">{{userInfo.nickName[0]}}</text>
-          </view>
-        </view>
-        <text class="nickname">{{userInfo.nickName}}</text>
-      </block>
+  <!-- Hero Section: full-bleed image -->
+  <view class="hero-section">
+    <image class="hero-bg" src="/images/tea-profile.png" mode="aspectFill"></image>
+  </view>
 
-      <!-- Not Login State -->
-      <block wx:else>
-        <view class="avatar-wrap" bindtap="handleLogin">
-          <view class="avatar-placeholder">
-            <text class="avatar-text">👤</text>
-          </view>
+  <!-- Menu Section -->
+  <view class="menu-section">
+    <view class="menu-list">
+
+      <!-- Profile Item (special: shows avatar when logged in) -->
+      <view class="menu-item" bindtap="onProfileTap">
+        <view class="menu-item-left">
+          <block wx:if="{{isLogin && userInfo.avatarUrl}}">
+            <image class="menu-avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
+          </block>
+          <block wx:else>
+            <image class="menu-icon" src="{{profileIconPath}}" mode="aspectFit"></image>
+          </block>
+          <text class="menu-name">{{isLogin ? userInfo.nickName : '个人资料'}}</text>
+          <text wx:if="{{!isLogin}}" class="menu-hint">点击登录</text>
         </view>
-        <text class="login-text" bindtap="handleLogin">点击登录</text>
-        <text class="login-hint">登录后享受更多服务</text>
-      </block>
+        <text class="menu-arrow">→</text>
+      </view>
+
+      <!-- Regular Menu Items -->
+      <view class="menu-item" wx:for="{{menuList}}" wx:key="key"
+            bindtap="onMenuTap" data-key="{{item.key}}">
+        <view class="menu-item-left">
+          <image class="menu-icon" src="{{item.iconPath}}" mode="aspectFit"></image>
+          <text class="menu-name">{{item.name}}</text>
+        </view>
+        <text class="menu-arrow">→</text>
+      </view>
+
     </view>
   </view>
 
-  <!-- Menu List -->
-  <view class="menu-section">
-    <view class="menu-item" wx:for="{{menuList}}" wx:key="key"
-          bindtap="onMenuTap" data-key="{{item.key}}">
-      <view class="menu-left">
-        <view class="menu-icon-wrap {{item.iconBg}}">
-          <text class="menu-emoji">{{item.icon}}</text>
-        </view>
-        <text class="menu-name">{{item.name}}</text>
-      </view>
-      <view class="menu-right">
-        <text class="menu-arrow">›</text>
-      </view>
-    </view>
+  <!-- Brand Quote -->
+  <view class="brand-quote">
+    <view class="quote-mark">"</view>
+    <text class="quote-text">好茶如友，历久弥新。</text>
   </view>
 
   <!-- Bottom Spacer -->
   <view class="bottom-spacer"></view>
+</view>
+
+<!-- Official WeChat Privacy Authorization Popup -->
+<view class="privacy-mask" wx:if="{{showPrivacy}}" catchtap="handleDisagreePrivacy">
+  <view class="privacy-popup" catchtap>
+    <view class="privacy-popup-title">隐私保护提示</view>
+    <view class="privacy-popup-body">
+      <text class="privacy-popup-text">
+        在使用茶语轩小程序前，请仔细阅读{{privacyContractName}}。如您同意，请点击"同意"开始使用。
+      </text>
+    </view>
+    <view class="privacy-popup-contract" bindtap="handleOpenPrivacyContract">
+      <text class="privacy-contract-link">{{privacyContractName}}</text>
+    </view>
+    <view class="privacy-popup-btns">
+      <view class="privacy-btn-disagree" bindtap="handleDisagreePrivacy">拒绝</view>
+      <button class="privacy-btn-agree"
+              id="agree-btn"
+              open-type="agreePrivacyAuthorization"
+              bindagreeprivacyauthorization="handleAgreePrivacyAuthorization">同意</button>
+    </view>
+  </view>
 </view>

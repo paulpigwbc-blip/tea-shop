@@ -124,6 +124,10 @@ App({
     this.globalData.resourceCloud.callFunction({
       name: 'registerSeller',
       success: (res) => {
+        // Capture OPENID for display on denied page
+        if (res.result && res.result.openid) {
+          this.globalData.userOpenId = res.result.openid;
+        }
         if (res.result && res.result.code === 0) {
           this.globalData.isSeller = true;
           this.globalData.isFirstSeller = true;
@@ -149,6 +153,66 @@ App({
         page._onAuthResult(this.globalData.isSeller);
       }
     });
+
+    // 启动订单通知检查（每60秒检查一次）
+    if (this.globalData.isSeller && this.globalData.cloudEnabled) {
+      this._startOrderNotificationCheck();
+    }
+  },
+
+  _startOrderNotificationCheck() {
+    // 清除之前的定时器
+    if (this._orderCheckTimer) {
+      clearInterval(this._orderCheckTimer);
+    }
+
+    // 每60秒检查一次待发货订单
+    this._orderCheckTimer = setInterval(() => {
+      this._checkPendingOrders();
+    }, 60000);
+
+    // 立即执行一次
+    this._checkPendingOrders();
+  },
+
+  _checkPendingOrders() {
+    const resourceCloud = this.globalData.resourceCloud;
+    if (!resourceCloud) return;
+
+    const db = resourceCloud.database();
+    const _ = resourceCloud.database().command;
+
+    db.collection('orders')
+      .where({ status: 'paid' })
+      .count()
+      .then(res => {
+        const count = res.total || 0;
+        const previousCount = this.globalData.pendingOrderCount || 0;
+        
+        this.globalData.pendingOrderCount = count;
+
+        // 如果有新的待发货订单，显示红点
+        if (count > 0) {
+          wx.showTabBarRedDot({
+            index: 1  // 订单 tab (第2个tab)
+          });
+
+          // 从无到有时，提示用户
+          if (previousCount === 0) {
+            wx.showToast({
+              title: `您有 ${count}个待发货订单`,
+              icon: 'none'
+            });
+          }
+        } else {
+          // 清除红点
+          wx.hideTabBarRedDot({
+            index: 1
+          });
+        }
+      }).catch(err => {
+        console.error('[App] Failed to check pending orders:', err);
+    });
   },
 
   globalData: {
@@ -156,10 +220,15 @@ App({
     authChecked: false,
     isSeller: false,
     isFirstSeller: false,
+    userOpenId: '',
     shopSettings: null,
     products: [],
     categories: ['绿茶', '红茶', '乌龙茶', '白茶', '花茶', '礼盒装'],
+    ordersTabIndex: undefined,
+    // 订单通知状态
+    pendingOrderCount: 0,
+    lastOrderCheckTime: null,
     // 资源方的 cloud 实例（用于环境共享）
     resourceCloud: null
-  }
+  },
 });

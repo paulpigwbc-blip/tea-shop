@@ -1,9 +1,9 @@
 /* pages/order-detail/order-detail.wxss */
 
 .detail-page {
-  background: #F5F5F5;
+  background: #FFFFFF;
   min-height: 100vh;
-  padding-bottom: 40rpx;
+  padding-bottom: calc(140rpx + env(safe-area-inset-bottom));
 }
 
 /* Status Banner */
@@ -22,25 +22,54 @@
 .status-desc {
   display: block;
   font-size: 26rpx;
-  color: rgba(255, 255, 255, 0.8);
+  color: #DDDDDD;
+}
+
+/* Refund Info */
+.refund-info {
+  display: flex;
+  align-items: center;
+  margin-top: 16rpx;
+  font-size: 26rpx;
+}
+
+.refund-label {
+  margin-right: 8rpx;
+  color: #EEEEEE;
+}
+
+.refund-status {
+  font-weight: bold;
+}
+
+.refund-success {
+  color: #4CAF50;
+}
+
+.refund-processing {
+  color: #FF9800;
+}
+
+.refund-failed {
+  color: #F44336;
 }
 
 /* Info Card */
 .info-card {
   background: #ffffff;
-  border-radius: 16rpx;
+  border-radius: 8rpx;
   margin: -20rpx 16rpx 16rpx;
   padding: 24rpx;
   position: relative;
   z-index: 10;
-  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.06);
+  border: 1rpx solid #EEEEEE;
 }
 
 .info-row {
   display: flex;
   justify-content: space-between;
   padding: 12rpx 0;
-  border-bottom: 1rpx solid #F5F5F5;
+  border-bottom: 1rpx solid #EEEEEE;
 }
 
 .info-row:last-child {
@@ -48,19 +77,19 @@
 }
 
 .info-label {
-  font-size: 28rpx;
-  color: #999999;
+  font-size: 30rpx;
+  color: #888888;
 }
 
 .info-value {
-  font-size: 28rpx;
+  font-size: 30rpx;
   color: #333333;
 }
 
 /* Address Card */
 .address-card {
   background: #ffffff;
-  border-radius: 16rpx;
+  border-radius: 8rpx;
   margin: 0 16rpx 16rpx;
   padding: 24rpx;
 }
@@ -69,26 +98,124 @@
   display: flex;
   align-items: center;
   margin-bottom: 16rpx;
-  font-size: 30rpx;
-  font-weight: bold;
+  font-size: 34rpx;
+  font-weight: 500;
   color: #333333;
 }
 
+.card-title-icon-wrap {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: #7BAF8A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+
+/* CSS-drawn icons - minimalist white shapes */
 .card-title-icon {
-  font-size: 32rpx;
-  margin-right: 12rpx;
+  position: relative;
+}
+
+/* Refund/coin icon */
+.icon-refund {
+  width: 18rpx;
+  height: 18rpx;
+  border: 3rpx solid #FFFFFF;
+  border-radius: 50%;
+}
+.icon-refund::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6rpx;
+  height: 2rpx;
+  background: #FFFFFF;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 -4rpx 0 #FFFFFF, 0 4rpx 0 #FFFFFF;
+}
+
+/* Location pin icon */
+.icon-location {
+  width: 14rpx;
+  height: 14rpx;
+  border: 3rpx solid #FFFFFF;
+  border-radius: 50% 50% 50% 0;
+  transform: rotate(-45deg);
+}
+
+/* Shopping bag icon */
+.icon-bag {
+  width: 18rpx;
+  height: 18rpx;
+  border: 3rpx solid #FFFFFF;
+  border-radius: 0 0 4rpx 4rpx;
+}
+.icon-bag::before {
+  content: '';
+  position: absolute;
+  top: -8rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12rpx;
+  height: 8rpx;
+  border: 3rpx solid #FFFFFF;
+  border-bottom: none;
+  border-radius: 50% 50% 0 0;
+}
+
+/* Timeline/clock icon */
+.icon-timeline {
+  width: 16rpx;
+  height: 16rpx;
+  border: 3rpx solid #FFFFFF;
+  border-radius: 50%;
+}
+
+/* Express/delivery truck icon */
+.icon-express {
+  width: 22rpx;
+  height: 14rpx;
+  border: 3rpx solid #FFFFFF;
+  border-radius: 3rpx;
+}
+.icon-express::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: -5rpx;
+  width: 4rpx;
+  height: 4rpx;
+  border: 2rpx solid #FFFFFF;
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+.icon-express::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  right: -5rpx;
+  width: 4rpx;
+  height: 4rpx;
+  border: 2rpx solid #FFFFFF;
+  border-radius: 50%;
+  transform: translateY(-50%);
 }
 
 .addr-name {
   display: block;
-  font-size: 28rpx;
-  font-weight: bold;
+  font-size: 30rpx;
+  font-weight: 500;
   color: #333333;
   margin-bottom: 8rpx;
 }
 
 .addr-detail {
-  font-size: 24rpx;
+  font-size: 30rpx;
   color: #666666;
   line-height: 1.5;
 }
@@ -96,7 +223,7 @@
 /* Items Card */
 .items-card {
   background: #ffffff;
-  border-radius: 16rpx;
+  border-radius: 8rpx;
   margin: 0 16rpx 16rpx;
   padding: 24rpx;
 }
@@ -105,7 +232,7 @@
   display: flex;
   align-items: center;
   padding: 16rpx 0;
-  border-bottom: 1rpx solid #F5F5F5;
+  border-bottom: 1rpx solid #EEEEEE;
 }
 
 .item-row:last-of-type {
@@ -136,8 +263,8 @@
 
 .placeholder-text {
   font-size: 32rpx;
-  color: rgba(139, 105, 20, 0.2);
-  font-weight: bold;
+  color: #E0E0E0;
+  font-weight: 300;
 }
 
 .item-info {
@@ -146,20 +273,20 @@
 
 .item-name {
   display: block;
-  font-size: 34rpx;
+  font-size: 32rpx;
   color: #333333;
   margin-bottom: 8rpx;
 }
 
 .item-qty {
-  font-size: 28rpx;
-  color: #999999;
+  font-size: 30rpx;
+  color: #888888;
 }
 
 .item-price {
-  font-size: 34rpx;
-  font-weight: bold;
-  color: #333333;
+  font-size: 30rpx;
+  font-weight: 500;
+  color: #444444;
   flex-shrink: 0;
 }
 
@@ -169,60 +296,93 @@
   align-items: center;
   padding-top: 20rpx;
   margin-top: 12rpx;
-  border-top: 2rpx solid #EEEEEE;
+  border-top: 1rpx solid #EEEEEE;
 }
 
 .total-label {
-  font-size: 28rpx;
+  font-size: 30rpx;
   color: #333333;
 }
 
 .total-price {
   font-size: 36rpx;
   font-weight: bold;
-  color: #E54D42;
+  color: #444444;
 }
 
 /* Action Section */
 .action-section {
-  padding: 0 16rpx;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 16rpx;
+  padding-bottom: calc(16rpx + env(safe-area-inset-bottom));
   display: flex;
   gap: 16rpx;
+  background: #FFFFFF;
+  border-top: 1rpx solid #EEEEEE;
+  z-index: 100;
 }
 
 .action-btn {
   flex: 1;
   text-align: center;
   padding: 28rpx 0;
-  border-radius: 44rpx;
+  border-radius: 4rpx;
   font-size: 32rpx;
-  font-weight: bold;
+  font-weight: 500;
 }
 
 .pay-action {
-  background: #E54D42;
-  color: #ffffff;
+  background: #7BAF8A;
+  color: #FFFFFF;
 }
 
 .cancel-action {
-  background: #F5F5F5;
-  color: #999999;
+  background: #F2F2F2;
+  color: #888888;
+}
+
+.cancel-pending-hint {
+  background: #FFF3E0;
+  color: #FF9800;
+  opacity: 0.85;
+  pointer-events: none;
+}
+
+.urgency-action {
+  background: #7BAF8A;
+  color: #FFFFFF;
+}
+
+.refund-action {
+  background: #FFFFFF;
+  color: #E54D42;
+  border: 2rpx solid #E54D42;
+}
+
+.refund-pending-hint {
+  background: #FFF3E0;
+  color: #FF9800;
+  opacity: 0.85;
+  pointer-events: none;
 }
 
 .confirm-action {
-  background: #5B7744;
-  color: #ffffff;
+  background: #7BAF8A;
+  color: #FFFFFF;
 }
 
 .reorder-action {
-  background: #8B6914;
-  color: #ffffff;
+  background: #7BAF8A;
+  color: #FFFFFF;
 }
 
 .list-action {
-  background: #ffffff;
-  color: #8B6914;
-  border: 2rpx solid #8B6914;
+  background: #FFFFFF;
+  color: #7BAF8A;
+  border: 2rpx solid #7BAF8A;
 }
 
 .action-btn::after {
@@ -270,7 +430,7 @@
   align-items: center;
   justify-content: center;
   font-size: 40rpx;
-  color: #999999;
+  color: #888888;
 }
 
 /* Amount */
@@ -281,7 +441,7 @@
 
 .pay-amount-label {
   font-size: 26rpx;
-  color: #999999;
+  color: #888888;
   display: block;
   margin-bottom: 16rpx;
 }
@@ -312,7 +472,7 @@
 
 .pay-method-label {
   font-size: 26rpx;
-  color: #999999;
+  color: #888888;
   display: block;
   margin-bottom: 20rpx;
 }
@@ -322,13 +482,13 @@
   align-items: center;
   padding: 24rpx;
   background: #F8F8F8;
-  border-radius: 16rpx;
+  border-radius: 8rpx;
   border: 2rpx solid transparent;
 }
 
 .pay-method-selected {
-  border-color: #07C160;
-  background: rgba(7, 193, 96, 0.05);
+  border-color: #7BAF8A;
+  background: #F0F5F2;
 }
 
 .pay-method-icon {
@@ -395,6 +555,169 @@
 }
 
 .pay-popup-btn.disabled {
-  background: #CCCCCC;
+  background: #E0E0E0;
   pointer-events: none;
+}
+
+/* Refund Card Styles */
+.refund-card {
+  border: 2rpx solid #4CAF50;
+  background: #F9FBE7;
+}
+
+.refund-card .refund-success {
+  color: #2E7D32;
+  font-weight: bold;
+}
+
+.refund-card .refund-processing {
+  color: #E65100;
+  font-weight: bold;
+}
+
+.refund-card .refund-failed {
+  color: #C62828;
+  font-weight: bold;
+}
+
+/* Express Card */
+.express-card {
+  background: #ffffff;
+  border-radius: 8rpx;
+  margin: 0 16rpx 16rpx;
+  padding: 24rpx;
+}
+
+.express-card .card-title {
+  display: flex;
+  align-items: center;
+  margin-bottom: 16rpx;
+  font-size: 34rpx;
+  font-weight: 500;
+  color: #333333;
+}
+
+.express-card .card-title-icon-wrap {
+  width: 48rpx;
+  height: 48rpx;
+  border-radius: 50%;
+  background: #7BAF8A;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16rpx;
+  flex-shrink: 0;
+}
+
+.express-info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12rpx 0;
+  border-bottom: 1rpx solid #EEEEEE;
+}
+
+.express-info-row:last-child {
+  border-bottom: none;
+}
+
+.express-info-row .info-label {
+  font-size: 30rpx;
+  color: #888888;
+}
+
+.express-info-row .info-value {
+  font-size: 30rpx;
+  color: #333333;
+}
+
+.express-tracking {
+  display: flex;
+  align-items: center;
+  gap: 12rpx;
+}
+
+.tracking-no {
+  font-family: 'Courier New', monospace;
+}
+
+.copy-tracking-btn {
+  padding: 8rpx 20rpx;
+  border: 2rpx solid #7BAF8A;
+  border-radius: 4rpx;
+  font-size: 24rpx;
+  color: #7BAF8A;
+}
+
+/* ===== Timeline Card ===== */
+.timeline-card {
+  background: #ffffff;
+  border-radius: 8rpx;
+  margin: 0 16rpx 16rpx;
+  padding: 24rpx;
+}
+
+.timeline-list {
+  padding-left: 4rpx;
+}
+
+.timeline-item {
+  display: flex;
+  align-items: flex-start;
+  padding: 14rpx 0;
+  position: relative;
+}
+
+.timeline-item::after {
+  content: '';
+  position: absolute;
+  left: 11rpx;
+  top: 0;
+  bottom: 0;
+  width: 2rpx;
+  background: #EEEEEE;
+}
+
+.timeline-item:last-child::after {
+  display: none;
+}
+
+.timeline-dot {
+  width: 24rpx;
+  height: 24rpx;
+  border-radius: 50%;
+  background: #DDDDDD;
+  border: 4rpx solid #FFFFFF;
+  flex-shrink: 0;
+  margin-right: 20rpx;
+  margin-top: 4rpx;
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
+}
+
+.timeline-latest .timeline-dot {
+  background: #7BAF8A;
+}
+
+.timeline-content {
+  flex: 1;
+}
+
+.timeline-label {
+  display: block;
+  font-size: 28rpx;
+  color: #333333;
+  font-weight: 500;
+  margin-bottom: 4rpx;
+}
+
+.timeline-latest .timeline-label {
+  color: #7BAF8A;
+  font-weight: bold;
+}
+
+.timeline-time {
+  font-size: 24rpx;
+  color: #999999;
 }

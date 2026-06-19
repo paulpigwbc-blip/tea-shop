@@ -6,13 +6,18 @@
 const cloud = require('wx-server-sdk');
 cloud.init({ env: cloud.DYNAMIC_CURRENT_ENV });
 const db = cloud.database();
+const _ = db.command;
 
 // Valid status transitions map
 // New lifecycle: pending → paid → shipped → completed (no "accepted" step)
+// Cancel flow: pending → cancel_pending → cancelled (seller approves) / pending (seller rejects)
+// Refund flow: paid → refund_pending → cancelled (seller approves) / paid (seller rejects)
 const VALID_TRANSITIONS = {
-  pending: ['paid', 'cancelled'],           // Buyer: pay or cancel
-  paid: ['shipped', 'cancelled'],           // Seller: ship or reject
-  shipped: ['completed'],                   // Buyer: confirm receipt
+  pending: ['paid', 'cancel_pending'],      // Buyer: pay or request cancel
+  cancel_pending: ['cancelled', 'pending'], // Seller: approve cancel (→cancelled) or reject (→pending)
+  paid: ['shipped', 'refund_pending'],      // Seller: ship; Buyer: request refund
+  refund_pending: ['cancelled', 'paid'],    // Seller: approve refund (→cancelled) or reject (→paid)
+  shipped: ['completed'],                   // Buyer: confirm receipt (no refund after shipped)
   completed: [],                            // Terminal state
   cancelled: []                             // Terminal state
 };
@@ -69,25 +74,42 @@ exports.main = async (event, context) => {
     }
 
     // Authorization rules:
-    // - Buyer can: pay (pending→paid), confirm receipt (shipped→completed), cancel own pending order
-    // - Seller can: ship (paid→shipped), cancel/reject paid orders
+    // - Buyer can: pay (pending→paid), request cancel (pending→cancel_pending), request refund (paid→refund_pending), confirm receipt (shipped→completed)
+    // - Seller can: ship (paid→shipped), approve cancel (cancel_pending→cancelled), reject cancel (cancel_pending→pending), approve refund (refund_pending→cancelled), reject refund (refund_pending→paid), complete order
     if (status === 'paid') {
-      // Only the buyer of this order can pay
+      if (order.status === 'refund_pending') {
+        // Seller rejecting refund (refund_pending → paid)
+        if (!isSeller) {
+          return { code: -1, data: null, message: 'Permission denied: only seller can reject refund' };
+        }
+      } else {
+        // Only the buyer of this order can pay (pending → paid)
+        if (!isBuyer) {
+          return { code: -1, data: null, message: 'Permission denied: only buyer can pay' };
+        }
+      }
+    } else if (status === 'cancel_pending') {
+      // Only buyer can request cancel (pending → cancel_pending)
       if (!isBuyer) {
-        return { code: -1, data: null, message: 'Permission denied: only buyer can pay' };
+        return { code: -1, data: null, message: 'Permission denied: only buyer can request cancel' };
+      }
+    } else if (status === 'refund_pending') {
+      // Only buyer can request refund (paid → refund_pending)
+      if (!isBuyer) {
+        return { code: -1, data: null, message: 'Permission denied: only buyer can request refund' };
       }
     } else if (status === 'cancelled') {
-      // Both buyer (own order) and seller can cancel/reject
-      if (order.status === 'pending') {
-        if (!isBuyer && !isSeller) {
-          return { code: -1, data: null, message: 'Permission denied: not authorized to cancel' };
-        }
-      } else if (order.status === 'paid') {
-        // Only seller can cancel a paid order (rejection)
+      // Only seller can approve cancellation (cancel_pending → cancelled) or refund (refund_pending → cancelled)
+      if (order.status === 'cancel_pending') {
         if (!isSeller) {
-          return { code: -1, data: null, message: 'Permission denied: only seller can reject' };
+          return { code: -1, data: null, message: 'Permission denied: only seller can approve cancel' };
+        }
+      } else if (order.status === 'refund_pending') {
+        if (!isSeller) {
+          return { code: -1, data: null, message: 'Permission denied: only seller can approve refund' };
         }
       }
+      // Note: pending → cancelled is no longer allowed (must go through cancel_pending)
     } else if (status === 'completed') {
       // Buyer confirms receipt of shipped order, or seller can also complete
       if (!isBuyer && !isSeller) {
@@ -110,18 +132,84 @@ exports.main = async (event, context) => {
       updatedAt: db.serverDate()
     };
 
+    if (status === 'pending') {
+      // Seller rejected cancel (cancel_pending → pending)
+      if (order.status === 'cancel_pending') {
+        updateData.cancelRejectedAt = db.serverDate();
+        updateData.cancelRejectedReason = cancelReason || '商家拒绝取消';
+        updateData.cancelRequestedAt = db.command.remove();
+        updateData.cancelRequestReason = db.command.remove();
+      }
+    }
+
     if (status === 'paid') {
-      updateData.paidAt = db.serverDate();
-      // TODO: When WeChat Pay is integrated, store payment info here
-      // updateData.payment = { method: 'wechat', transactionId: event.transactionId, paidAt: db.serverDate() };
+      if (order.status === 'refund_pending') {
+        // Seller rejected refund — revert to paid, clear refund request
+        updateData.refundRejectedAt = db.serverDate();
+        updateData.refundRejectedReason = cancelReason || '商家拒绝退款';
+        updateData.refundRequestedAt = db.command.remove();
+        updateData.refundRequestReason = db.command.remove();
+      } else {
+        // Buyer paid (pending → paid)
+        updateData.paidAt = db.serverDate();
+        // TODO: When WeChat Pay is integrated, store payment info here
+        // updateData.payment = { method: 'wechat', transactionId: event.transactionId, paidAt: db.serverDate() };
+        
+        // Mock: Store mock payment info
+        updateData.payment = _.set({
+          method: 'mock',
+          transactionId: 'MOCK_' + Date.now(),
+          paidAt: db.serverDate(),
+          amount: order.totalPrice
+        });
+      }
+    }
+
+    if (status === 'cancel_pending') {
+      // Buyer requested cancel — store request info
+      updateData.cancelRequestedAt = db.serverDate();
+      updateData.cancelRequestReason = cancelReason || '买家申请取消';
+    }
+
+    if (status === 'refund_pending') {
+      // Buyer requested refund — store request info
+      updateData.refundRequestedAt = db.serverDate();
+      updateData.refundRequestReason = cancelReason || '买家申请退款';
+    }
+
+    if (status === 'shipped') {
+      // Require express company and tracking number when shipping
+      const { expressCompany, trackingNo } = event;
+      if (!expressCompany || !trackingNo) {
+        return { code: -1, data: null, message: 'Express company and tracking number are required for shipping' };
+      }
+      updateData.shippedAt = db.serverDate();
+      updateData.express = _.set({
+        company: expressCompany,
+        trackingNo: trackingNo,
+        shippedAt: db.serverDate()
+      });
     }
 
     if (status === 'cancelled') {
       updateData.cancelReason = cancelReason || '';
       updateData.cancelledBy = isBuyer ? 'buyer' : 'seller';
 
+      // Refund logic: if order was paid or refund_pending, process refund
+      if (order.status === 'paid' || order.status === 'refund_pending') {
+        // Mock refund: auto-process refund immediately
+        updateData.refund = _.set({
+          status: 'success',  // success | processing | failed
+          amount: order.totalPrice,
+          refundId: 'REFUND_MOCK_' + Date.now(),
+          refundAt: db.serverDate(),
+          reason: cancelReason || (isSeller ? '商家同意退款' : '买家取消订单')
+        });
+        console.log(`[Refund] Mock refund processed for order ${order.orderNo}:`, updateData.refund);
+      }
+
       // Restore product stock if order was cancelled before completion
-      if (order.status === 'pending' || order.status === 'paid' || order.status === 'shipped') {
+      if (order.status === 'pending' || order.status === 'cancel_pending' || order.status === 'paid' || order.status === 'refund_pending' || order.status === 'shipped') {
         for (const item of order.items) {
           try {
             await db.collection('products').doc(String(item.productId)).update({
@@ -140,6 +228,8 @@ exports.main = async (event, context) => {
 
     if (status === 'completed') {
       updateData.completedAt = db.serverDate();
+      // Record who confirmed the receipt (buyer / seller / auto)
+      updateData.confirmedBy = isSeller ? 'seller' : 'buyer';
     }
 
     await db.collection('orders').doc(orderId).update({ data: updateData });

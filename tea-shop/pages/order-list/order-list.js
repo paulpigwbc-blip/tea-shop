@@ -3,11 +3,12 @@ const { getStatusText, getStatusColor, formatDate } = require('../../utils/util'
 
 Page({
   data: {
-    tabs: ['全部', '待付款', '待发货', '已发货', '已完成'],
-    tabStatuses: ['all', 'pending', 'paid', 'shipped', 'completed'],
+    tabs: ['全部', '待付款', '待发货', '退款', '已发货', '已完成'],
+    tabStatuses: ['all', 'pending', 'paid', 'refund_related', 'shipped', 'completed'],
     activeTab: 2,
     orders: [],
     filteredOrders: [],
+    searchText: '',
     showPayPopup: false,
     payProcessing: false,
     paySuccess: false,
@@ -118,12 +119,39 @@ Page({
     this.filterOrders();
   },
 
+  // Search input
+  onSearchInput(e) {
+    this.setData({ searchText: e.detail.value });
+    this.filterOrders();
+  },
+
+  // Clear search
+  clearSearch() {
+    this.setData({ searchText: '' });
+    this.filterOrders();
+  },
+
   filterOrders() {
     const status = this.data.tabStatuses[this.data.activeTab];
+    const keyword = (this.data.searchText || '').trim().toLowerCase();
     let filtered = this.data.orders;
 
     if (status !== 'all') {
-      filtered = filtered.filter(o => o.status === status);
+      if (status === 'refund_related') {
+        // 退款相关：退款中 + 已退款
+        filtered = filtered.filter(o => o.status === 'refund_pending' || (o.status === 'cancelled' && o.refund));
+      } else {
+        filtered = filtered.filter(o => o.status === status);
+      }
+    }
+
+    // Search filter: orderNo + product names
+    if (keyword) {
+      filtered = filtered.filter(o => {
+        if ((o.orderNo || '').toLowerCase().includes(keyword)) return true;
+        if ((o.items || []).some(item => (item.name || '').toLowerCase().includes(keyword))) return true;
+        return false;
+      });
     }
 
     // Format for display
@@ -168,6 +196,114 @@ Page({
       payOrderId: id,
       payAmount: order.totalPrice
     });
+  },
+
+  // Request urgency (催单)
+  requestUrgency(e) {
+    const id = e.currentTarget.dataset.id;
+    const order = this.data.orders.find(o => o._id === id);
+    if (!order) return;
+
+    wx.showModal({
+      title: '催促发货',
+      content: '确定要催促商家发货吗？',
+      confirmText: '确定催单',
+      confirmColor: '#8B6914',
+      success: (res) => {
+        if (res.confirm) {
+          wx.showLoading({ title: '发送中...' });
+
+          if (wx.cloud) {
+            wx.cloud.callFunction({
+              name: 'sendUrgencyMessage',
+              data: {
+                orderId: id,
+                autoTrigger: false
+              },
+              success: (result) => {
+                wx.hideLoading();
+                if (result.result && result.result.code === 0) {
+                  wx.showToast({ title: '催单已发送', icon: 'success' });
+                  this.loadOrders();
+                } else {
+                  wx.showToast({ 
+                    title: result.result.message || '发送失败', 
+                    icon: 'none' 
+                  });
+                }
+              },
+              fail: (err) => {
+                wx.hideLoading();
+                console.error('Send urgency failed:', err);
+                wx.showToast({ title: '网络错误，请重试', icon: 'none' });
+              }
+            });
+          } else {
+            wx.hideLoading();
+            wx.showToast({ title: '云服务暂不可用', icon: 'none' });
+          }
+        }
+      }
+    });
+  },
+
+  // Request refund — buyer initiates refund request, merchant must approve
+  requestRefund(e) {
+    const id = e.currentTarget.dataset.id;
+    const order = this.data.orders.find(o => o._id === id);
+    if (!order || order.status !== 'paid') return;
+
+    wx.showModal({
+      title: '申请退款',
+      content: '确定要申请退款吗？退款金额 ¥' + order.totalPrice + ' 将原路退回。商家确认后自动退款。',
+      confirmText: '确定退款',
+      confirmColor: '#E54D42',
+      success: (res) => {
+        if (res.confirm) {
+          if (wx.cloud) {
+            wx.showLoading({ title: '处理中...' });
+            wx.cloud.callFunction({
+              name: 'updateOrderStatus',
+              data: {
+                orderId: id,
+                status: 'refund_pending',
+                cancelReason: '买家申请退款'
+              },
+              success: (res) => {
+                wx.hideLoading();
+                if (res.result && res.result.code === 0) {
+                  this._requestRefundLocal(id);
+                } else {
+                  wx.showToast({ title: (res.result && res.result.message) || '申请失败', icon: 'none' });
+                }
+              },
+              fail: (err) => {
+                wx.hideLoading();
+                console.error('Refund cloud function failed:', err);
+                this._requestRefundLocal(id);
+              }
+            });
+          } else {
+            this._requestRefundLocal(id);
+          }
+        }
+      }
+    });
+  },
+
+  // Internal: apply refund_pending status locally and refresh list
+  _requestRefundLocal(id) {
+    const orders = this.data.orders;
+    const order = orders.find(o => o._id === id);
+    if (order) {
+      order.status = 'refund_pending';
+      order.updatedAt = new Date().toISOString();
+      order.refundRequestedAt = new Date().toISOString();
+      order.refundRequestReason = '买家申请退款';
+      wx.setStorageSync('orders', orders);
+      this.loadOrders();
+      wx.showToast({ title: '退款申请已提交', icon: 'success' });
+    }
   },
 
   // Close payment popup
@@ -225,12 +361,14 @@ Page({
     }, 800);
   },
 
-  // Cancel order - MUST go through cloud function for security
+  // Cancel order — buyer requests cancel, merchant must approve
   cancelOrder(e) {
     const id = e.currentTarget.dataset.id;
     wx.showModal({
       title: '提示',
-      content: '确定要取消该订单吗？',
+      content: '确定要申请取消该订单吗？商家确认后订单将取消。',
+      confirmText: '申请取消',
+      confirmColor: '#E54D42',
       success: (res) => {
         if (res.confirm) {
           // SECURITY: Route through cloud function
@@ -238,37 +376,39 @@ Page({
             wx.showLoading({ title: '处理中...' });
             wx.cloud.callFunction({
               name: 'updateOrderStatus',
-              data: { orderId: id, status: 'cancelled', cancelReason: '买家取消' },
+              data: { orderId: id, status: 'cancel_pending', cancelReason: '买家申请取消' },
               success: (res) => {
                 wx.hideLoading();
                 if (res.result && res.result.code === 0) {
-                  this._cancelOrderLocal(id);
+                  this._requestCancelLocal(id);
                 } else {
-                  wx.showToast({ title: (res.result && res.result.message) || '取消失败', icon: 'none' });
+                  wx.showToast({ title: (res.result && res.result.message) || '申请失败', icon: 'none' });
                 }
               },
               fail: () => {
                 wx.hideLoading();
-                this._cancelOrderLocal(id);
+                this._requestCancelLocal(id);
               }
             });
           } else {
-            this._cancelOrderLocal(id);
+            this._requestCancelLocal(id);
           }
         }
       }
     });
   },
 
-  _cancelOrderLocal(id) {
+  _requestCancelLocal(id) {
     const orders = this.data.orders;
     const order = orders.find(o => o._id === id);
     if (order) {
-      order.status = 'cancelled';
+      order.status = 'cancel_pending';
       order.updatedAt = new Date().toISOString();
+      order.cancelRequestedAt = new Date().toISOString();
+      order.cancelRequestReason = '买家申请取消';
       wx.setStorageSync('orders', orders);
       this.loadOrders();
-      wx.showToast({ title: '订单已取消', icon: 'success' });
+      wx.showToast({ title: '取消申请已提交', icon: 'success' });
     }
   },
 

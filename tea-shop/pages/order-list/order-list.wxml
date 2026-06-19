@@ -11,6 +11,15 @@
     </view>
   </view>
 
+  <!-- Search Bar -->
+  <view class="search-bar">
+    <view class="search-icon">🔍</view>
+    <input class="search-input" placeholder="搜索订单编号 / 商品名称" value="{{searchText}}" bindinput="onSearchInput" confirm-type="search" />
+    <view class="search-clear" wx:if="{{searchText}}" bindtap="clearSearch">
+      <text>✕</text>
+    </view>
+  </view>
+
   <!-- Order List -->
   <scroll-view class="order-scroll" scroll-y enhanced show-scrollbar="{{false}}">
     <view class="order-card" wx:for="{{filteredOrders}}" wx:key="_id" bindtap="viewOrder" data-id="{{item._id}}">
@@ -47,6 +56,20 @@
                 catchtap="cancelOrder" data-id="{{item._id}}">
             <text>取消</text>
           </view>
+          <view class="action-btn cancel-pending-btn" wx:if="{{item.status === 'cancel_pending'}}">
+            <text>取消中</text>
+          </view>
+          <view class="action-btn urgency-btn" wx:if="{{item.status === 'paid'}}"
+                catchtap="requestUrgency" data-id="{{item._id}}">
+            <text>催单</text>
+          </view>
+          <view class="action-btn refund-btn" wx:if="{{item.status === 'paid'}}"
+                catchtap="requestRefund" data-id="{{item._id}}">
+            <text>退款</text>
+          </view>
+          <view class="action-btn refund-pending-btn" wx:if="{{item.status === 'refund_pending'}}">
+            <text>退款中</text>
+          </view>
           <view class="action-btn confirm-btn" wx:if="{{item.status === 'shipped'}}"
                 catchtap="confirmReceipt" data-id="{{item._id}}">
             <text>确认收货</text>
@@ -65,7 +88,7 @@
     <!-- Empty State -->
     <view class="empty-orders" wx:if="{{filteredOrders.length === 0}}">
       <view class="empty-icon">
-        <text class="empty-icon-text">📋</text>
+        <view class="empty-icon-shape icon-clipboard"></view>
       </view>
       <text class="empty-text">暂无相关订单</text>
     </view>

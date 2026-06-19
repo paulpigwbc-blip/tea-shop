@@ -93,4 +93,18 @@
   <view class="deny-icon">🔒</view>
   <text class="deny-title">无访问权限</text>
   <text class="deny-desc">您不是本店管理员\n请联系商家管理员添加权限</text>
+
+  <!-- Show OPENID for manual setup -->
+  <view class="openid-section" wx:if="{{userOpenId}}">
+    <text class="openid-label">您的 OpenID（商家身份ID）：</text>
+    <view class="openid-box" bindtap="copyOpenId">
+      <text class="openid-value" selectable="{{true}}" user-select="{{true}}">{{userOpenId}}</text>
+      <text class="openid-copy">点击复制</text>
+    </view>
+    <text class="openid-hint">请将此 OpenID 添加到云数据库\n shop-settings → shop → sellerOpenIds 数组中</text>
+  </view>
+
+  <view class="retry-btn" bindtap="retryAuth">
+    <text>重新验证</text>
+  </view>
 </view>

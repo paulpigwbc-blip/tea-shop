@@ -1,16 +1,16 @@
 /* pages/address-edit/address-edit.wxss */
 
 .edit-page {
-  background: #F5F5F5;
+  background: #FFFFFF;
   min-height: 100vh;
   padding-bottom: 160rpx;
 }
 
 /* Form Card */
 .form-card {
-  background: #ffffff;
+  background: #FFFFFF;
   margin: 16rpx;
-  border-radius: 16rpx;
+  border-radius: 8rpx;
   overflow: hidden;
 }
 
@@ -18,7 +18,7 @@
   display: flex;
   align-items: center;
   padding: 28rpx 30rpx;
-  border-bottom: 1rpx solid #F5F5F5;
+  border-bottom: 1rpx solid #EEEEEE;
 }
 
 .form-item:last-child {
@@ -56,12 +56,12 @@
 }
 
 .picker-display.placeholder {
-  color: #999999;
+  color: #888888;
 }
 
 .picker-arrow {
   font-size: 32rpx;
-  color: #CCCCCC;
+  color: #C0C0C0;
   margin-left: 12rpx;
 }
 
@@ -78,9 +78,9 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #ffffff;
+  background: #FFFFFF;
   margin: 16rpx;
-  border-radius: 16rpx;
+  border-radius: 8rpx;
   padding: 28rpx 30rpx;
 }
 
@@ -98,22 +98,22 @@
 }
 
 .toggle-switch.on {
-  background: #8B6914;
+  background: #7BAF8A;
 }
 
 .toggle-switch.off {
-  background: #DDDDDD;
+  background: #E0E0E0;
 }
 
 .toggle-knob {
   width: 40rpx;
   height: 40rpx;
   border-radius: 50%;
-  background: #ffffff;
+  background: #FFFFFF;
   position: absolute;
   top: 4rpx;
   transition: left 0.3s;
-  box-shadow: 0 2rpx 6rpx rgba(0, 0, 0, 0.15);
+  border: 1rpx solid #EEEEEE;
 }
 
 .toggle-switch.on .toggle-knob {
@@ -130,19 +130,19 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: #ffffff;
+  background: #FFFFFF;
   padding: 16rpx 24rpx;
-  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  border-top: 1rpx solid #EEEEEE;
 }
 
 .save-btn {
-  background: #8B6914;
-  color: #ffffff;
+  background: #7BAF8A;
+  color: #FFFFFF;
   text-align: center;
   padding: 24rpx;
-  border-radius: 40rpx;
+  border-radius: 4rpx;
   font-size: 28rpx;
-  font-weight: bold;
+  font-weight: 500;
 }
 
 .save-btn::after {

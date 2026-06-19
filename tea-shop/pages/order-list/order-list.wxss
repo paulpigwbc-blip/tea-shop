@@ -1,7 +1,7 @@
 /* pages/order-list/order-list.wxss */
 
 .order-list-page {
-  background: #F5F5F5;
+  background: #FFFFFF;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -26,8 +26,8 @@
 }
 
 .tab-item.active {
-  color: #8B6914;
-  font-weight: bold;
+  color: #333333;
+  font-weight: 600;
 }
 
 .tab-indicator {
@@ -37,8 +37,42 @@
   transform: translateX(-50%);
   width: 40rpx;
   height: 4rpx;
-  background: #8B6914;
+  background: #333333;
   border-radius: 2rpx;
+}
+
+/* Search Bar */
+.search-bar {
+  display: flex;
+  align-items: center;
+  margin: 16rpx 16rpx 0;
+  padding: 16rpx 24rpx;
+  background: #F8F8F8;
+  border-radius: 8rpx;
+  flex-shrink: 0;
+}
+
+.search-icon {
+  font-size: 28rpx;
+  margin-right: 12rpx;
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333333;
+}
+
+.search-clear {
+  width: 40rpx;
+  height: 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24rpx;
+  color: #999999;
+  flex-shrink: 0;
 }
 
 /* Order Scroll */
@@ -49,11 +83,11 @@
 
 /* Order Card */
 .order-card {
-  background: #ffffff;
-  border-radius: 16rpx;
+  background: #FFFFFF;
+  border-radius: 8rpx;
   padding: 24rpx;
   margin-bottom: 16rpx;
-  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.04);
+  border: 1rpx solid #EEEEEE;
 }
 
 .order-header {
@@ -62,17 +96,17 @@
   align-items: center;
   margin-bottom: 20rpx;
   padding-bottom: 16rpx;
-  border-bottom: 1rpx solid #F5F5F5;
+  border-bottom: 1rpx solid #EEEEEE;
 }
 
 .order-no {
   font-size: 26rpx;
-  color: #999999;
+  color: #888888;
 }
 
 .order-status {
   font-size: 28rpx;
-  font-weight: bold;
+  font-weight: 500;
 }
 
 /* Order Items */
@@ -100,8 +134,8 @@
 
 .preview-text {
   font-size: 28rpx;
-  color: rgba(139, 105, 20, 0.2);
-  font-weight: bold;
+  color: #E0E0E0;
+  font-weight: 300;
 }
 
 .preview-info {
@@ -119,7 +153,7 @@
 
 .preview-qty {
   font-size: 28rpx;
-  color: #999999;
+  color: #888888;
 }
 
 /* Order Footer */
@@ -128,12 +162,12 @@
   justify-content: space-between;
   align-items: center;
   padding-top: 16rpx;
-  border-top: 1rpx solid #F5F5F5;
+  border-top: 1rpx solid #EEEEEE;
 }
 
 .order-time {
   font-size: 24rpx;
-  color: #BBBBBB;
+  color: #888888;
 }
 
 .order-actions {
@@ -145,38 +179,61 @@
 .order-total {
   font-size: 32rpx;
   font-weight: bold;
-  color: #E54D42;
+  color: #444444;
 }
 
 .action-btn {
   padding: 14rpx 28rpx;
-  border-radius: 24rpx;
+  border-radius: 4rpx;
   font-size: 28rpx;
 }
 
 .pay-btn {
-  background: #E54D42;
-  color: #ffffff;
+  background: #7BAF8A;
+  color: #FFFFFF;
 }
 
 .cancel-btn {
-  background: #F5F5F5;
-  color: #999999;
+  background: #F2F2F2;
+  color: #888888;
+}
+
+.cancel-pending-btn {
+  background: #FFF3E0;
+  color: #FF9800;
+  pointer-events: none;
+}
+
+.urgency-btn {
+  background: #7BAF8A;
+  color: #FFFFFF;
+}
+
+.refund-btn {
+  background: #FFFFFF;
+  color: #E54D42;
+  border: 2rpx solid #E54D42;
+}
+
+.refund-pending-btn {
+  background: #FFF3E0;
+  color: #FF9800;
+  pointer-events: none;
 }
 
 .confirm-btn {
-  background: rgba(91, 119, 68, 0.15);
-  color: #5B7744;
+  background: #F2F2F2;
+  color: #7BAF8A;
 }
 
 .reorder-btn {
-  background: rgba(139, 105, 20, 0.1);
-  color: #8B6914;
+  background: #F2F2F2;
+  color: #7BAF8A;
 }
 
 .view-btn {
-  background: #8B6914;
-  color: #ffffff;
+  background: #7BAF8A;
+  color: #FFFFFF;
 }
 
 .action-btn::after {
@@ -194,7 +251,7 @@
 .empty-icon {
   width: 200rpx;
   height: 200rpx;
-  background: #F5F5F5;
+  background: #F8F8F8;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -202,13 +259,29 @@
   margin-bottom: 30rpx;
 }
 
-.empty-icon-text {
-  font-size: 80rpx;
+.empty-icon-shape {
+  position: relative;
+  width: 48rpx;
+  height: 60rpx;
+  border: 6rpx solid #7BAF8A;
+  border-radius: 6rpx;
+}
+
+.empty-icon-shape::before {
+  content: '';
+  position: absolute;
+  top: -14rpx;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 24rpx;
+  height: 10rpx;
+  background: #7BAF8A;
+  border-radius: 4rpx;
 }
 
 .empty-text {
-  font-size: 28rpx;
-  color: #999999;
+  font-size: 30rpx;
+  color: #888888;
 }
 
 .bottom-spacer {
@@ -256,7 +329,7 @@
   align-items: center;
   justify-content: center;
   font-size: 40rpx;
-  color: #999999;
+  color: #888888;
 }
 
 .pay-amount-section {
@@ -266,7 +339,7 @@
 
 .pay-amount-label {
   font-size: 26rpx;
-  color: #999999;
+  color: #888888;
   display: block;
   margin-bottom: 16rpx;
 }
@@ -296,7 +369,7 @@
 
 .pay-method-label {
   font-size: 26rpx;
-  color: #999999;
+  color: #888888;
   display: block;
   margin-bottom: 20rpx;
 }
@@ -311,8 +384,8 @@
 }
 
 .pay-method-selected {
-  border-color: #07C160;
-  background: rgba(7, 193, 96, 0.05);
+  border-color: #7BAF8A;
+  background: #F0F5F2;
 }
 
 .pay-method-icon {

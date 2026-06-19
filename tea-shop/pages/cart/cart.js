@@ -6,10 +6,15 @@ Page({
     cartItems: [],
     isAllChecked: false,
     totalCount: 0,
-    totalPrice: 0
+    totalPrice: 0,
+    isManageMode: false,
+    selectedCount: 0
   },
 
   onShow() {
+    if (typeof this.getTabBar === 'function' && this.getTabBar()) {
+      this.getTabBar().setData({ selected: 2 });
+    }
     this.loadCart();
   },
 
@@ -21,6 +26,20 @@ Page({
       isAllChecked: isAllChecked
     });
     this.calculateTotal();
+  },
+
+  // Toggle manage mode
+  toggleManageMode() {
+    const isManageMode = !this.data.isManageMode;
+    this.setData({ isManageMode: isManageMode });
+    this.updateSelectedCount();
+    this.calculateTotal();
+  },
+
+  // Update selected count for manage mode
+  updateSelectedCount() {
+    const selectedCount = this.data.cartItems.filter(item => item.checked).length;
+    this.setData({ selectedCount: selectedCount });
   },
 
   // Toggle item check
@@ -37,6 +56,7 @@ Page({
     }
     const isAllChecked = cartItems.every(item => item.checked);
     this.setData({ cartItems: cartItems, isAllChecked: isAllChecked });
+    this.updateSelectedCount();
     this.calculateTotal();
   },
 
@@ -51,6 +71,7 @@ Page({
     });
     app.saveCart();
     this.setData({ cartItems: cartItems, isAllChecked: isAllChecked });
+    this.updateSelectedCount();
     this.calculateTotal();
   },
 
@@ -90,6 +111,27 @@ Page({
       success: (res) => {
         if (res.confirm) {
           app.removeFromCart(id);
+          this.loadCart();
+        }
+      }
+    });
+  },
+
+  // Batch delete selected items
+  batchDelete() {
+    const selectedItems = this.data.cartItems.filter(item => item.checked);
+    if (selectedItems.length === 0) {
+      wx.showToast({ title: '请选择商品', icon: 'none' });
+      return;
+    }
+    wx.showModal({
+      title: '提示',
+      content: '确定要删除选中的' + selectedItems.length + '件商品吗？',
+      success: (res) => {
+        if (res.confirm) {
+          const selectedIds = selectedItems.map(item => item.id);
+          selectedIds.forEach(id => app.removeFromCart(id));
+          this.setData({ isManageMode: false });
           this.loadCart();
         }
       }

@@ -1,84 +1,75 @@
 <!-- pages/contact/contact.wxml -->
 <view class="contact-page">
 
-  <!-- Header Banner -->
-  <view class="contact-header">
-    <view class="header-overlay">
-      <text class="header-title">联系我们</text>
-      <text class="header-subtitle">期待与您的每一次交流</text>
+  <!-- Hero Section: full-bleed image with text overlay -->
+  <view class="hero-section">
+    <image class="hero-bg" src="/images/tea-contact.png" mode="aspectFill"></image>
+    <view class="hero-overlay">
+      <view class="hero-tag">CONTACT</view>
+      <view class="hero-title">联系我们</view>
+      <view class="hero-subtitle">期待与您的每一次交流</view>
     </view>
   </view>
 
   <!-- Contact Methods -->
   <view class="contact-section">
-    <view class="section-title-wrap">
-      <view class="section-dot"></view>
-      <text class="section-title">联系方式</text>
+    <!-- Phone -->
+    <view class="contact-item" bindtap="makeCall" data-phone="{{phone}}">
+      <view class="contact-item-top">
+        <view class="contact-item-title">
+          <image class="contact-icon" src="{{phoneIcon}}" mode="aspectFit"></image>
+          <text class="contact-item-label">客服热线</text>
+        </view>
+        <text class="contact-item-arrow">→</text>
+      </view>
+      <text class="contact-item-value">{{phone}}</text>
     </view>
 
-    <!-- Phone Card -->
-    <view class="contact-card" bindtap="makeCall" data-phone="{{phone}}">
-      <view class="contact-icon-wrap phone-bg">
-        <text class="contact-emoji">📞</text>
+    <view class="item-divider"></view>
+
+    <!-- WeChat -->
+    <view class="contact-item" bindtap="copyWechat">
+      <view class="contact-item-top">
+        <view class="contact-item-title">
+          <image class="contact-icon" src="{{wechatIcon}}" mode="aspectFit"></image>
+          <text class="contact-item-label">官方微信</text>
+        </view>
+        <text class="contact-item-action">复制</text>
       </view>
-      <view class="contact-detail">
-        <text class="contact-label">客服热线</text>
-        <text class="contact-value">{{phone}}</text>
-      </view>
-      <view class="contact-arrow">
-        <text class="arrow-text">›</text>
-      </view>
+      <text class="contact-item-value">{{wechat}}</text>
     </view>
 
-    <!-- WeChat Card -->
-    <view class="contact-card" bindtap="copyWechat">
-      <view class="contact-icon-wrap wechat-bg">
-        <text class="contact-emoji">💬</text>
-      </view>
-      <view class="contact-detail">
-        <text class="contact-label">官方微信</text>
-        <text class="contact-value">{{wechat}}</text>
-      </view>
-      <view class="contact-action">
-        <text class="copy-text">复制</text>
-      </view>
-    </view>
+    <view class="item-divider"></view>
 
-    <!-- Business Hours Card -->
-    <view class="contact-card">
-      <view class="contact-icon-wrap hours-bg">
-        <text class="contact-emoji">🕑</text>
+    <!-- Delivery -->
+    <view class="contact-item">
+      <view class="contact-item-top">
+        <view class="contact-item-title">
+          <image class="contact-icon" src="{{truckIcon}}" mode="aspectFit"></image>
+          <text class="contact-item-label">配送方式</text>
+        </view>
       </view>
-      <view class="contact-detail">
-        <text class="contact-label">服务时间</text>
-        <text class="contact-value">{{storeHours}}</text>
-      </view>
-    </view>
-
-    <!-- Delivery Notice Card -->
-    <view class="contact-card">
-      <view class="contact-icon-wrap delivery-bg">
-        <text class="contact-emoji">🚚</text>
-      </view>
-      <view class="contact-detail">
-        <text class="contact-label">配送方式</text>
-        <text class="contact-value">全国快递包邮</text>
-      </view>
+      <text class="contact-item-value">全国快递包邮</text>
     </view>
   </view>
 
   <!-- QR Code Section -->
   <view class="qrcode-section">
-    <view class="section-title-wrap">
-      <view class="section-dot"></view>
-      <text class="section-title">微信扫码</text>
+    <view class="section-header">
+      <text class="section-label">微信扫码</text>
     </view>
-    <view class="qrcode-card">
+    <view class="qrcode-wrap">
       <view class="qrcode-placeholder">
         <text class="qrcode-text">二维码</text>
         <text class="qrcode-subtext">扫码添加客服微信</text>
       </view>
     </view>
+  </view>
+
+  <!-- Brand Quote -->
+  <view class="brand-quote">
+    <view class="quote-mark">"</view>
+    <text class="quote-text">每一杯好茶，都值得用心交流。</text>
   </view>
 
   <!-- Bottom Spacer -->

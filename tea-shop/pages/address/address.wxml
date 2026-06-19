@@ -35,7 +35,7 @@
   <!-- Empty State -->
   <view class="empty-address" wx:if="{{addresses.length === 0}}">
     <view class="empty-icon">
-      <text class="empty-icon-text">📍</text>
+      <view class="empty-icon-shape icon-pin"></view>
     </view>
     <text class="empty-text">暂无收货地址</text>
     <text class="empty-subtext">添加一个收货地址吧</text>

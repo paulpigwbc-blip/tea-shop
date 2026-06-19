@@ -12,9 +12,10 @@ exports.main = async (event, context) => {
   const OPENID = wxContext.FROM_OPENID || wxContext.OPENID;
   
   if (!OPENID) {
-    return { code: -1, data: null, message: '无法获取用户身份' };
+    return { code: -1, data: null, message: '无法获取用户身份', openid: null };
   }
 
+  // Always return OPENID so admin app can display it for manual setup
   try {
     // Get current shop settings
     let settings;
@@ -35,13 +36,13 @@ exports.main = async (event, context) => {
           updatedAt: db.serverDate()
         }
       });
-      return { code: 0, data: { registered: true }, message: '商家身份注册成功' };
+      return { code: 0, data: { registered: true }, message: '商家身份注册成功', openid: OPENID };
     }
 
     // Check if already registered
     const sellerOpenIds = settings.sellerOpenIds || [];
     if (sellerOpenIds.includes(OPENID)) {
-      return { code: 0, data: { alreadyRegistered: true }, message: '已经是商家用户' };
+      return { code: 0, data: { alreadyRegistered: true }, message: '已经是商家用户', openid: OPENID };
     }
 
     // Add to seller list
@@ -52,13 +53,14 @@ exports.main = async (event, context) => {
       }
     });
 
-    return { code: 0, data: { registered: true }, message: '商家身份注册成功' };
+    return { code: 0, data: { registered: true }, message: '商家身份注册成功', openid: OPENID };
   } catch (err) {
     console.error('Register seller error:', err);
     return {
       code: -1,
       data: null,
-      message: err.message || '注册失败'
+      message: err.message || '注册失败',
+      openid: OPENID
     };
   }
 };

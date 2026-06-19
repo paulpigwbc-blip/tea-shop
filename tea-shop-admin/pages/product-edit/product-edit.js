@@ -48,8 +48,9 @@ Page({
 
     if (options.id) {
       // Load product from cloud DB
-      if (wx.cloud) {
-        const db = wx.cloud.database();
+      const resourceCloud2 = app.globalData.resourceCloud;
+      if (resourceCloud2) {
+        const db = resourceCloud2.database();
         db.collection('products').doc(options.id).get().then(res => {
           if (res.data) {
             const p = res.data;
@@ -101,8 +102,9 @@ Page({
 
     // Convert cloud:// fileIDs to temporary HTTP URLs for reliable display
     const cloudFileIDs = images.filter(url => typeof url === 'string' && url.startsWith('cloud://'));
-    if (cloudFileIDs.length > 0 && wx.cloud) {
-      wx.cloud.getTempFileURL({
+    const resourceCloud = app.globalData.resourceCloud;
+    if (cloudFileIDs.length > 0 && resourceCloud) {
+      resourceCloud.getTempFileURL({
         fileList: cloudFileIDs,
         success: (res) => {
           const fileMap = {};
@@ -211,7 +213,8 @@ Page({
 
         console.log('[DIAG] Uploading image', idx, '| url:', img.url, '| cloudPath:', cloudPath);
 
-        wx.cloud.uploadFile({
+        const resourceCloud = app.globalData.resourceCloud;
+        resourceCloud.uploadFile({
           cloudPath: cloudPath,
           filePath: img.url,
           success: (res) => {
@@ -263,13 +266,11 @@ Page({
     const price = Number(product.price);
     const stock = Number(product.stock) || 0;
 
-    if (wx.cloud) {
+    const resourceCloud = app.globalData.resourceCloud;
+    if (resourceCloud) {
       wx.showLoading({ title: '上传并保存中...' });
 
-      // Quick cloud connectivity test
-      const db = wx.cloud.database();
-      db.serverDate();  // If cloud is broken, this would throw
-      console.log('[DIAG] Cloud initialized, env:', wx.cloud.init ? 'init called' : 'no init');
+      const db = resourceCloud.database();
 
       this._uploadNewImages().then(result => {
         console.log('[DIAG] upload result:', JSON.stringify(result));
@@ -311,7 +312,7 @@ Page({
         console.log('[DIAG] isEdit:', this.data.isEdit, '| productId:', product._id);
 
         // Use cloud function for DB write (bypasses security rules)
-        wx.cloud.callFunction({
+        resourceCloud.callFunction({
           name: 'updateProduct',
           data: {
             productId: this.data.isEdit ? product._id : null,
@@ -326,8 +327,8 @@ Page({
               // Verify: re-read the document
               const savedId = (res.result.data && res.result.data._id) || product._id;
               if (savedId) {
-                const db = wx.cloud.database();
-                db.collection('products').doc(savedId).field({ updatedAt: true, images: true, name: true }).get().then(verifyRes => {
+                const vdb = resourceCloud.database();
+                vdb.collection('products').doc(savedId).field({ updatedAt: true, images: true, name: true }).get().then(verifyRes => {
                   console.log('[DIAG] Verify after save:', JSON.stringify(verifyRes.data));
                 }).catch(() => {});
               }

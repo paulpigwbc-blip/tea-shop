@@ -1,7 +1,7 @@
 /* pages/order-confirm/order-confirm.wxss */
 
 .confirm-page {
-  background: #F5F5F5;
+  background: #FFFFFF;
   min-height: 100vh;
   padding-bottom: 0;
 }
@@ -50,13 +50,13 @@
 
 .address-detail {
   font-size: 24rpx;
-  color: #999999;
+  color: #888888;
   line-height: 1.5;
 }
 
 .address-arrow {
   font-size: 32rpx;
-  color: #CCCCCC;
+  color: #C0C0C0;
   padding: 10rpx;
 }
 
@@ -69,7 +69,7 @@
 
 .no-address-text {
   font-size: 28rpx;
-  color: #999999;
+  color: #888888;
 }
 
 /* Items Section */
@@ -84,14 +84,14 @@
   align-items: center;
   margin-bottom: 20rpx;
   font-size: 30rpx;
-  font-weight: bold;
+  font-weight: 500;
   color: #333333;
 }
 
 .section-dot {
   width: 8rpx;
   height: 28rpx;
-  background: #8B6914;
+  background: #7BAF8A;
   border-radius: 4rpx;
   margin-right: 16rpx;
 }
@@ -100,7 +100,7 @@
   display: flex;
   align-items: center;
   padding: 20rpx 0;
-  border-bottom: 1rpx solid #F5F5F5;
+  border-bottom: 1rpx solid #EEEEEE;
 }
 
 .order-item:last-child {
@@ -131,8 +131,8 @@
 
 .item-placeholder-text {
   font-size: 36rpx;
-  color: rgba(139, 105, 20, 0.2);
-  font-weight: bold;
+  color: #E0E0E0;
+  font-weight: 300;
 }
 
 .item-info {
@@ -143,7 +143,7 @@
 .item-name {
   display: block;
   font-size: 32rpx;
-  font-weight: bold;
+  font-weight: 500;
   color: #333333;
   margin-bottom: 8rpx;
   overflow: hidden;
@@ -154,7 +154,7 @@
 .item-desc {
   display: block;
   font-size: 26rpx;
-  color: #999999;
+  color: #888888;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -169,14 +169,14 @@
 .item-price {
   display: block;
   font-size: 32rpx;
-  font-weight: bold;
-  color: #333333;
+  font-weight: 500;
+  color: #444444;
   margin-bottom: 6rpx;
 }
 
 .item-qty {
   font-size: 28rpx;
-  color: #999999;
+  color: #888888;
 }
 
 /* Note Section */
@@ -191,8 +191,8 @@
   height: 120rpx;
   font-size: 26rpx;
   color: #333333;
-  background: #F5F5F5;
-  border-radius: 12rpx;
+  background: #F8F8F8;
+  border-radius: 4rpx;
   padding: 16rpx;
   margin-top: 12rpx;
 }
@@ -230,7 +230,7 @@
 .price-total {
   font-size: 36rpx;
   font-weight: bold;
-  color: #E54D42;
+  color: #444444;
 }
 
 /* Bottom Spacer */
@@ -246,9 +246,9 @@
   right: 0;
   display: flex;
   align-items: center;
-  background: #ffffff;
+  background: #FFFFFF;
   padding: 16rpx 24rpx;
-  box-shadow: 0 -2rpx 12rpx rgba(0, 0, 0, 0.06);
+  border-top: 1rpx solid #EEEEEE;
 }
 
 .submit-total {
@@ -267,21 +267,21 @@
 .submit-price {
   font-size: 36rpx;
   font-weight: bold;
-  color: #E54D42;
+  color: #444444;
 }
 
 .submit-btn {
-  background: #8B6914;
-  color: #ffffff;
+  background: #7BAF8A;
+  color: #FFFFFF;
   padding: 28rpx 68rpx;
-  border-radius: 44rpx;
+  border-radius: 4rpx;
   font-size: 32rpx;
-  font-weight: bold;
+  font-weight: 500;
   flex-shrink: 0;
 }
 
 .submit-btn.disabled {
-  background: #CCCCCC;
+  background: #E0E0E0;
 }
 
 .submit-btn::after {

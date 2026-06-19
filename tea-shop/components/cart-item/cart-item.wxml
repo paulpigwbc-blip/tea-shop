@@ -10,7 +10,7 @@
   <!-- Product Image -->
   <view class="item-img">
     <image class="item-img-real" wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFill" />
-    <view class="item-placeholder" wx:else style="background: linear-gradient(135deg, {{item.id % 2 === 0 ? '#E8DCC8, #D4C4A8' : '#C8D8B8, #A8C090'}});">
+    <view class="item-placeholder" wx:else>
       <text class="item-placeholder-char">{{item.name[0]}}</text>
     </view>
   </view>

@@ -11,6 +11,15 @@
     </view>
   </view>
 
+  <!-- Search Bar -->
+  <view class="search-bar">
+    <view class="search-icon">🔍</view>
+    <input class="search-input" placeholder="搜订单号 / 收货人 / 快递单号 / 商品" value="{{searchText}}" bindinput="onSearchInput" confirm-type="search" />
+    <view class="search-clear" wx:if="{{searchText}}" bindtap="clearSearch">
+      <text>✕</text>
+    </view>
+  </view>
+
   <!-- Order List -->
   <scroll-view class="order-scroll" scroll-y enhanced show-scrollbar="{{false}}">
     <view class="order-card" wx:for="{{filteredOrders}}" wx:key="_id">
@@ -45,8 +54,24 @@
           <text>发货</text>
         </view>
         <view class="action-btn btn-reject" wx:if="{{item.status === 'paid'}}"
-              catchtap="updateStatus" data-status="cancelled" data-id="{{item._id}}">
+              catchtap="confirmCancel" data-id="{{item._id}}">
           <text>拒绝</text>
+        </view>
+        <view class="action-btn btn-approve" wx:if="{{item.status === 'cancel_pending'}}"
+              catchtap="approveCancel" data-id="{{item._id}}">
+          <text>同意取消</text>
+        </view>
+        <view class="action-btn btn-reject-refund" wx:if="{{item.status === 'cancel_pending'}}"
+              catchtap="rejectCancel" data-id="{{item._id}}">
+          <text>拒绝取消</text>
+        </view>
+        <view class="action-btn btn-approve" wx:if="{{item.status === 'refund_pending'}}"
+              catchtap="approveRefund" data-id="{{item._id}}">
+          <text>同意退款</text>
+        </view>
+        <view class="action-btn btn-reject-refund" wx:if="{{item.status === 'refund_pending'}}"
+              catchtap="rejectRefund" data-id="{{item._id}}">
+          <text>拒绝退款</text>
         </view>
         <view class="action-btn btn-complete" wx:if="{{item.status === 'shipped'}}"
               catchtap="completeOrder" data-id="{{item._id}}">

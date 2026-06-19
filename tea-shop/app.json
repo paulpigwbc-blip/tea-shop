@@ -12,17 +12,19 @@
     "pages/address/address",
     "pages/address-edit/address-edit"
   ],
+  "__usePrivacyCheck__": true,
   "window": {
     "backgroundTextStyle": "light",
-    "navigationBarBackgroundColor": "#ffffff",
+    "navigationBarBackgroundColor": "#FFFFFF",
     "navigationBarTitleText": "茶语轩",
     "navigationBarTextStyle": "black",
-    "backgroundColor": "#ffffff"
+    "backgroundColor": "#FFFFFF"
   },
   "tabBar": {
-    "color": "#999999",
-    "selectedColor": "#8B6914",
-    "backgroundColor": "#ffffff",
+    "custom": true,
+    "color": "#C0C0C0",
+    "selectedColor": "#333333",
+    "backgroundColor": "#FFFFFF",
     "borderStyle": "white",
     "list": [
       {

@@ -5,10 +5,22 @@
   <view class="status-banner" style="background: linear-gradient(135deg, {{statusColor}}, {{statusColor}}dd);">
     <text class="status-text">{{statusText}}</text>
     <text class="status-desc" wx:if="{{order.status === 'pending'}}">订单待付款，请尽快完成支付</text>
-    <text class="status-desc" wx:if="{{order.status === 'paid'}}">已支付，等待商家发货</text>
+    <text class="status-desc" wx:if="{{order.status === 'cancel_pending'}}">取消申请中，等待商家处理</text>
+    <text class="status-desc" wx:if="{{order.status === 'paid'}}">已支付，等待商家发货。发货前可申请退款</text>
+    <text class="status-desc" wx:if="{{order.status === 'refund_pending'}}">退款申请中，等待商家处理</text>
     <text class="status-desc" wx:if="{{order.status === 'shipped'}}">商家已发货，请注意查收</text>
     <text class="status-desc" wx:if="{{order.status === 'completed'}}">感谢您的购买</text>
     <text class="status-desc" wx:if="{{order.status === 'cancelled'}}">订单已取消</text>
+    <view class="refund-info" wx:if="{{order.status === 'cancelled' && order.refund}}">
+      <text class="refund-label">退款状态：</text>
+      <text class="refund-status refund-{{order.refund.status}}">
+        {{order.refund.status === 'success' ? '已退款 ¥' + order.refund.amount : (order.refund.status === 'processing' ? '退款中' : '退款失败')}}
+      </text>
+    </view>
+    <!-- Refund rejection info -->
+    <view class="refund-info" wx:if="{{order.status === 'paid' && order.refundRejectedAt}}">
+      <text class="refund-label">退款已被商家拒绝</text>
+    </view>
   </view>
 
   <!-- Order Info Card -->
@@ -29,28 +41,99 @@
       <text class="info-label">订单备注</text>
       <text class="info-value">{{order.note}}</text>
     </view>
+    <view class="info-row" wx:if="{{order.payment}}">
+      <text class="info-label">支付方式</text>
+      <text class="info-value">{{order.payment.method === 'mock' ? '模拟支付' : '微信支付'}}</text>
+    </view>
+    <view class="info-row" wx:if="{{order.payment}}">
+      <text class="info-label">支付时间</text>
+      <text class="info-value">{{formatDate(order.payment.paidAt)}}</text>
+    </view>
+  </view>
+
+  <!-- Refund Info Card -->
+  <view class="info-card refund-card" wx:if="{{order.refund}}">
+    <view class="card-title">
+      <view class="card-title-icon-wrap">
+        <view class="card-title-icon icon-refund"></view>
+      </view>
+      <text>退款信息</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">退款金额</text>
+      <text class="info-value">¥{{order.refund.amount}}</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">退款时间</text>
+      <text class="info-value">{{formatDate(order.refund.refundAt)}}</text>
+    </view>
+    <view class="info-row">
+      <text class="info-label">退款状态</text>
+      <text class="info-value refund-{{order.refund.status}}">
+        {{order.refund.status === 'success' ? '退款成功' : (order.refund.status === 'processing' ? '退款中' : '退款失败')}}
+      </text>
+    </view>
+    <view class="info-row" wx:if="{{order.refund.reason}}">
+      <text class="info-label">退款原因</text>
+      <text class="info-value">{{order.refund.reason}}</text>
+    </view>
+    <view class="info-row" wx:if="{{order.refund.refundId}}">
+      <text class="info-label">退款单号</text>
+      <text class="info-value">{{order.refund.refundId}}</text>
+    </view>
   </view>
 
   <!-- Delivery Address -->
   <view class="address-card" wx:if="{{order.type === 'delivery' && order.address}}">
     <view class="card-title">
-      <text class="card-title-icon">📍</text>
+      <view class="card-title-icon-wrap">
+        <view class="card-title-icon icon-location"></view>
+      </view>
       <text>收货地址</text>
     </view>
     <text class="addr-name">{{order.address.name}} {{order.address.phone}}</text>
     <text class="addr-detail">{{order.address.province}}{{order.address.city}}{{order.address.district}}{{order.address.detail}}</text>
   </view>
 
+  <!-- Express Info Card -->
+  <view class="express-card" wx:if="{{order.express}}">
+    <view class="card-title">
+      <view class="card-title-icon-wrap">
+        <view class="card-title-icon icon-express"></view>
+      </view>
+      <text>快递信息</text>
+    </view>
+    <view class="express-info-row">
+      <text class="info-label">快递公司</text>
+      <text class="info-value">{{order.express.company}}</text>
+    </view>
+    <view class="express-info-row">
+      <text class="info-label">快递单号</text>
+      <view class="express-tracking">
+        <text class="info-value tracking-no">{{order.express.trackingNo}}</text>
+        <view class="copy-tracking-btn" catchtap="copyTrackingNo">
+          <text>复制</text>
+        </view>
+      </view>
+    </view>
+    <view class="express-info-row" wx:if="{{order.express.shippedAt}}">
+      <text class="info-label">发货时间</text>
+      <text class="info-value">{{formatDate(order.express.shippedAt)}}</text>
+    </view>
+  </view>
+
   <!-- Order Items -->
   <view class="items-card">
     <view class="card-title">
-      <text class="card-title-icon">🛍</text>
+      <view class="card-title-icon-wrap">
+        <view class="card-title-icon icon-bag"></view>
+      </view>
       <text>商品详情</text>
     </view>
     <view class="item-row" wx:for="{{order.items}}" wx:key="productId" bindtap="goToProductDetail" data-id="{{item.productId}}">
       <view class="item-img">
         <image class="item-img-real" wx:if="{{item.image}}" src="{{item.image}}" mode="aspectFill" />
-        <view class="item-placeholder" wx:else style="background: linear-gradient(135deg, {{item.productId % 2 === 0 ? '#E8DCC8, #D4C4A8' : '#C8D8B8, #A8C090'}});">
+        <view class="item-placeholder" wx:else>
           <text class="placeholder-text">{{item.name[0]}}</text>
         </view>
       </view>
@@ -66,13 +149,45 @@
     </view>
   </view>
 
+  <!-- Order Timeline -->
+  <view class="timeline-card" wx:if="{{timeline.length > 0}}">
+    <view class="card-title">
+      <view class="card-title-icon-wrap">
+        <view class="card-title-icon icon-timeline"></view>
+      </view>
+      <text>订单轨迹</text>
+    </view>
+    <view class="timeline-list">
+      <view class="timeline-item {{index === 0 ? 'timeline-latest' : ''}}"
+            wx:for="{{timeline}}" wx:key="time">
+        <view class="timeline-dot"></view>
+        <view class="timeline-content">
+          <text class="timeline-label">{{item.label}}</text>
+          <text class="timeline-time">{{item.time}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
   <!-- Action Buttons -->
   <view class="action-section">
     <view class="action-btn pay-action" wx:if="{{order.status === 'pending'}}" bindtap="payOrder">
       <text>立即付款</text>
     </view>
     <view class="action-btn cancel-action" wx:if="{{order.status === 'pending'}}" bindtap="cancelOrder">
-      <text>取消订单</text>
+      <text>申请取消</text>
+    </view>
+    <view class="action-btn cancel-pending-hint" wx:if="{{order.status === 'cancel_pending'}}">
+      <text>取消处理中</text>
+    </view>
+    <view class="action-btn urgency-action" wx:if="{{order.status === 'paid'}}" bindtap="requestUrgency">
+      <text>催促发货</text>
+    </view>
+    <view class="action-btn refund-action" wx:if="{{order.status === 'paid'}}" bindtap="requestRefund">
+      <text>申请退款</text>
+    </view>
+    <view class="action-btn refund-pending-hint" wx:if="{{order.status === 'refund_pending'}}">
+      <text>退款处理中</text>
     </view>
     <view class="action-btn confirm-action" wx:if="{{order.status === 'shipped'}}" bindtap="confirmReceipt">
       <text>确认收货</text>
